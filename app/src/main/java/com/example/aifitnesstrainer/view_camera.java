@@ -254,7 +254,8 @@ public class view_camera extends AppCompatActivity {
                         if (!seqState.contains(current_state)) {
                             seqState.add(current_state);
                         }
-                        if(seqState.get(seqState.size() - 1)==3 && current_state==1){
+                        Collections.sort(seqState, Collections.reverseOrder());
+                        if(seqState.get(0)==3 && current_state==1){
                             int previous_score=current_score;
                             current_score++;
                             int new_score=current_score;
@@ -306,7 +307,7 @@ public class view_camera extends AppCompatActivity {
                                 boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
                                 if (inserted) {
                                     Toast.makeText(view_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
@@ -342,7 +343,7 @@ public class view_camera extends AppCompatActivity {
                         // Update EditText fields
                         EditText kneeEditText = findViewById(R.id.angleknee);
                         kneeEditText.setText("angle of knee: "+roundedKneeFlexionAngle + " " + greatestKneeAngle+" "+current_state
-                                +" "+seqState.get(seqState.size() - 1));
+                                +" "+seqState.get(0));
                         EditText hipEditText = findViewById(R.id.anglehip);
                         hipEditText.setText("angle of hip: " + roundedHipFlexionAngle+" "+greatestHipAngle);
                         EditText ankleEditText = findViewById(R.id.angleankle);

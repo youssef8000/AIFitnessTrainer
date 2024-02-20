@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context) {
-        super(context, "myDB.db", null, 1);
+        super(context, "newDB.db", null, 1);
     }
 
     @Override
@@ -147,6 +147,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             // User not found or database error
             return null;
         }
+    }
+    public Cursor getAllFeedbackByEmail(String email) {
+        SQLiteDatabase MyDatabase = this.getReadableDatabase();
+        String[] columns = {"ex_name", "goal", "correct_score", "incorrect_score", "accuracy", "workoutfeedback"};
+        String selection = "email=?";
+        String[] selectionArgs = {email};
+
+        // Query the database
+        Cursor cursor = MyDatabase.query("feedback", columns, selection, selectionArgs, null, null, null);
+
+        return cursor;
     }
     public Boolean updatePassword(String email, String password){
         SQLiteDatabase MyDatabase = this.getWritableDatabase();

@@ -15,9 +15,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-public class MainActivity extends AppCompatActivity {
+public class Feedback extends AppCompatActivity {
     private ImageButton logoutbtn;
-    private ImageButton searchcamerabtn;
+    private ImageButton feedback;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
     private BottomNavigationView bottomNavigationView;
@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_feedback);
         logoutbtn = findViewById(R.id.btn_logout);
-        searchcamerabtn = findViewById(R.id.btn_camera);
+        feedback = findViewById(R.id.btn_camera);
         toolbar = findViewById(R.id.toolbar_nav);
         bottomNavigationView = findViewById(R.id.bottom_nav);
         setSupportActionBar(toolbar);
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-        searchcamerabtn.setOnClickListener(new View.OnClickListener() {
+        feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openUserFeedbackFragment();
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        openFragment(new homamainFragment());
+        openFragment(new UserFeedback());
     }
     private void openFragment(Fragment fragment) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
