@@ -10,6 +10,10 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.os.CountDownTimer;
+import android.speech.tts.TextToSpeech;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
@@ -28,6 +32,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,6 +49,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 
@@ -63,6 +71,7 @@ public class view_camera extends AppCompatActivity {
     Paint paint = new Paint();
     Paint ErrorPaint = new Paint();
     Display display;
+    ProgressBar circularProgressBar;
     Bitmap bitmap4Save;
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<Bitmap> bitmap4DisplayArrayList = new ArrayList<>();
@@ -73,10 +82,12 @@ public class view_camera extends AppCompatActivity {
     List<Integer> ankleAngles = new ArrayList<>();
     List<Integer> seqState = new ArrayList<>();
     List<String> userFeedback = new ArrayList<>();
+    TextToSpeech speak;
+    boolean feedbackSpoken = false;
+    boolean complete_exercise = false;
     int current_score=0;
     int incorrect_score=0;
     int correct_score=0;
-
     @ExperimentalGetImage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +96,7 @@ public class view_camera extends AppCompatActivity {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         previewView = findViewById(R.id.preview);
         display = findViewById(R.id.display);
+        circularProgressBar = findViewById(R.id.circularProgressBar);
 
         mPaint.setColor(Color.YELLOW);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -98,19 +110,48 @@ public class view_camera extends AppCompatActivity {
         ErrorPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         ErrorPaint.setStrokeWidth(5);
         finish_squat= findViewById(R.id.finish);
+        speak=new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
 
-        cameraProviderFuture.addListener(() -> {
-            try {
-                ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                bindPreview(cameraProvider);
-            } catch (ExecutionException | InterruptedException e) {
-                // No errors need to be handled for this Future.
+                if(status != TextToSpeech.ERROR){
+                    speak.setLanguage(Locale.ENGLISH);
+                }
             }
-        }, ContextCompat.getMainExecutor(this));
-        if (!allPermissionsGranted()) {
-            getRuntimePermissions();
-        }
+        });
+        startCircularTimer();
+
     }
+
+    @SuppressLint("ObjectAnimatorBinding")
+    @ExperimentalGetImage
+    private void startCircularTimer() {
+        TextView countdownTextView = findViewById(R.id.countdownTextView);
+        RelativeLayout timer = findViewById(R.id.timer);
+        circularProgressBar.setVisibility(View.VISIBLE);
+        ObjectAnimator.ofFloat(circularProgressBar, "progress", 100, 0).setDuration(5000).start();
+        new CountDownTimer(5000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                int secondsRemaining = (int) (millisUntilFinished / 1000);
+                countdownTextView.setText(String.valueOf(secondsRemaining));
+            }
+            public void onFinish() {
+                timer.setVisibility(View.INVISIBLE);
+                speak.speak("Let's start training",TextToSpeech.QUEUE_FLUSH,null);
+                cameraProviderFuture.addListener(() -> {
+                    try {
+                        ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
+                        bindPreview(cameraProvider);
+                    } catch (ExecutionException | InterruptedException e) {
+                        // No errors need to be handled for this Future.
+                    }
+                }, ContextCompat.getMainExecutor(getApplicationContext()));
+                if (!allPermissionsGranted()) {
+                    getRuntimePermissions();
+                }            }
+        }.start();
+    }
+
     Runnable RunMlkit = new Runnable() {
         @Override
         public void run() {
@@ -255,27 +296,33 @@ public class view_camera extends AppCompatActivity {
                             seqState.add(current_state);
                         }
                         Collections.sort(seqState, Collections.reverseOrder());
-                        if(seqState.get(0)==3 && current_state==1){
+                        if((seqState.get(0)==3 && current_state==1 && !complete_exercise) || (seqState.get(0)==2 && current_state==1 && !complete_exercise)){
                             int previous_score=current_score;
                             current_score++;
                             int new_score=current_score;
                             if(greatestKneeAngle> 95){
                                 incorrect_score++;
                                 userFeedback.add("Your knee angle is too deep.");
+                                speak.speak("This is an incorrect move because your knee angle is too deep",TextToSpeech.QUEUE_FLUSH,null);
                             } else if (greatestKneeAngle>50 && greatestKneeAngle<80) {
                                 incorrect_score++;
                                 userFeedback.add("Lower your hip to correct the knee angle.");
+                                speak.speak("This is an incorrect move because Lower your hip to correct the knee angle",TextToSpeech.QUEUE_FLUSH,null);
                             } else if (greatestHipAngle>45 ) {
                                 incorrect_score++;
                                 userFeedback.add("You are bending backward.");
+                                speak.speak("This is an incorrect move because You are bending backward",TextToSpeech.QUEUE_FLUSH,null);
                             } else if (greatestHipAngle<20 && greatestHipAngle>10) {
                                 incorrect_score++;
                                 userFeedback.add("You are bending forward.");
+                                speak.speak("This is an incorrect move because You are bending forward",TextToSpeech.QUEUE_FLUSH,null);
                             } else if ( greatestAnkleAngle>40 ) {
                                 incorrect_score++;
                                 userFeedback.add("Your knee is falling over your toe.");
+                                speak.speak("This is an incorrect move because Your knee is falling over your toe",TextToSpeech.QUEUE_FLUSH,null);
                             } else{
                                 correct_score++;
+                                speak.speak("This is an correct move",TextToSpeech.QUEUE_FLUSH,null);
                             }
 
                             if (new_score >previous_score) {
@@ -290,9 +337,11 @@ public class view_camera extends AppCompatActivity {
                         goalEditText.setText("Goal: "+current_score+" / "+goal);
                         correct_scoree.setText("Correct: "+correct_score);
                         incorrect_scoree.setText("InCorrect: "+incorrect_score);
-
-                        if(current_score==goal){
+                        if(current_score==goal && !feedbackSpoken){
                             finish_squat.setVisibility(View.VISIBLE);
+                            speak.speak("You finish your exercise please press the button to see feedback about your moves",TextToSpeech.QUEUE_ADD,null);
+                            feedbackSpoken = true;
+                            complete_exercise=true;
                         }
                         finish_squat.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -514,16 +563,5 @@ public class view_camera extends AppCompatActivity {
             ActivityCompat.requestPermissions(
                     this, allNeededPermissions.toArray(new String[0]), PERMISSION_REQUESTS);
         }
-    }
-    private void openUserFeedbackFragment() {
-        // Create a new instance of the UserFeedback fragment
-        UserFeedback userFeedbackFragment = new UserFeedback();
-
-        // Begin a fragment transaction
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, userFeedbackFragment) // Replace fragment_container with the ID of your fragment container layout
-                .addToBackStack(null) // Add the transaction to the back stack
-                .commit();
     }
 }
