@@ -51,6 +51,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 
 public class view_camera extends AppCompatActivity {
@@ -59,12 +67,10 @@ public class view_camera extends AppCompatActivity {
     int PERMISSION_REQUESTS = 1;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     PreviewView previewView;
-    // Base pose detector with streaming frames, when depending on the pose-detection sdk
     PoseDetectorOptions options =
             new PoseDetectorOptions.Builder()
                     .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
                     .build();
-
     PoseDetector poseDetector = PoseDetection.getClient(options);
     Canvas canvas;
     Paint mPaint = new Paint();
@@ -141,7 +147,7 @@ public class view_camera extends AppCompatActivity {
                 cameraProviderFuture.addListener(() -> {
                     try {
                         ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                        bindPreview(cameraProvider);
+                        poseDetection(cameraProvider);
                     } catch (ExecutionException | InterruptedException e) {
                         // No errors need to be handled for this Future.
                     }
@@ -169,7 +175,7 @@ public class view_camera extends AppCompatActivity {
         }
     };
     @ExperimentalGetImage
-    void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
+    void poseDetection(@NonNull ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder()
                 .build();
         CameraSelector cameraSelector = new CameraSelector.Builder()
@@ -183,7 +189,6 @@ public class view_camera extends AppCompatActivity {
 //                        .setTargetResolution(new Size(1280, 720))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
-
         imageAnalysis.setAnalyzer(ActivityCompat.getMainExecutor(this), new ImageAnalysis.Analyzer() {
             @Override
             public void analyze(@NonNull ImageProxy imageProxy) {
@@ -202,17 +207,11 @@ public class view_camera extends AppCompatActivity {
                     for (PoseLandmark poseLandmark : poseArrayList.get(0).getAllPoseLandmarks()) {
 
                         if (poseLandmark.getLandmarkType() == PoseLandmark.NOSE ||
-//                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_SHOULDER ||
                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_SHOULDER ||
-//                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_ELBOW ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_ELBOW ||
-//                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_WRIST ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_WRIST ||
-//                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_HIP ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_HIP ||
-//                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_KNEE ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_KNEE ||
-//                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_ANKLE ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_ANKLE ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_PINKY ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_PINKY ||
@@ -222,7 +221,6 @@ public class view_camera extends AppCompatActivity {
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_THUMB ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_HEEL ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_HEEL ||
-//                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_FOOT_INDEX ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_FOOT_INDEX ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_EYE_INNER ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_EYE ||
@@ -236,12 +234,13 @@ public class view_camera extends AppCompatActivity {
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_MOUTH) {
                             continue;
                         }
-                        // Draw circle for other landmarks
                         canvas.drawCircle(poseLandmark.getPosition().x, poseLandmark.getPosition().y, 3, mPaint);
                     }
                     databaseHelper = new DatabaseHelper(getApplicationContext());
                     SharedPreferences preferences = getSharedPreferences("user_info", Context.MODE_PRIVATE);
                     String userEmail = preferences.getString("user_email", "");
+                    User user = databaseHelper.getUserByEmail(userEmail);
+                    String userName=user.getname();
                     user_goal lastUserGoal = databaseHelper.getUsergoalByEmail(userEmail);
                     EditText goalEditText = findViewById(R.id.goalEditText);
                     EditText correct_scoree = findViewById(R.id.correct_score);
@@ -353,6 +352,7 @@ public class view_camera extends AppCompatActivity {
                                 int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
                                 double accuracy = (double) correctScore / (correctScore + incorrectScore);
                                 String workoutFeedback = TextUtils.join(", ", userFeedback);
+                                sendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
                                 boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
                                 if (inserted) {
                                     Toast.makeText(view_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
@@ -361,6 +361,7 @@ public class view_camera extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                                 }
+
                             }
                         });
                         // Define the starting and ending points for the vertical line
@@ -389,14 +390,6 @@ public class view_camera extends AppCompatActivity {
                         drawDottedLine(bitmap, kneeCoord, kneeCoord[1] - 50, kneeCoord[1] + 20, Color.BLACK);
                         drawDottedLine(bitmap, ankleCoord, ankleCoord[1] - 50, ankleCoord[1] + 20, Color.WHITE); // Adjust color as needed
 
-                        // Update EditText fields
-                        EditText kneeEditText = findViewById(R.id.angleknee);
-                        kneeEditText.setText("angle of knee: "+roundedKneeFlexionAngle + " " + greatestKneeAngle+" "+current_state
-                                +" "+seqState.get(0));
-                        EditText hipEditText = findViewById(R.id.anglehip);
-                        hipEditText.setText("angle of hip: " + roundedHipFlexionAngle+" "+greatestHipAngle);
-                        EditText ankleEditText = findViewById(R.id.angleankle);
-                        ankleEditText.setText("angle of ankle: " + roundedAnkleDorsiflexionAngle + " " + greatestAnkleAngle);
                         errormessage.setText("");
 
                         // Update Knee Message
@@ -449,7 +442,6 @@ public class view_camera extends AppCompatActivity {
                     poseArrayList.clear();
                     isRunning = false;
                 }
-
                 if (poseArrayList.size() == 0 && bitmapArrayList.size() >= 1 && !isRunning) {
                     RunMlkit.run();
                     isRunning = true;
@@ -460,8 +452,22 @@ public class view_camera extends AppCompatActivity {
                 imageProxy.close();
             }
         });
-
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
+    }
+    private void sendMail(String email, String userName,String ex_name, int goal, int correctScore, int incorrectScore, double accuracy, String workoutFeedback) {
+        String subject = "Feedback about your training for this exercise";
+        String message = "Dear, " + userName
+                + "\nYou've finished your workout and here are our training notes for this workout"
+                + "\nExercise Name: " + ex_name
+                + "\nYour Goal: " + goal
+                + "\nYour Correct repetition: " + correctScore
+                + "\nYour Incorrect repetition: " + incorrectScore
+                + "\nOur Feedback: " + workoutFeedback
+                + "\nYour Accuracy: " + accuracy
+                + "\nKeep going and do your best.";
+
+        JavaMailAPI javaMailAPI = new JavaMailAPI(this, email, subject, message);
+        javaMailAPI.execute();
     }
     private int getState(int kneeAngle) {
         int knee = 0;

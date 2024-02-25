@@ -73,48 +73,6 @@
              />
     </LinearLayout>
 
-    <!-- Add EditText to display angle -->
-    <EditText
-        android:id="@+id/anglehip"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_gravity="bottom|end"
-        android:inputType="none"
-        android:text=""
-        android:background="@color/black"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-    <EditText
-        android:id="@+id/angleknee"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:inputType="none"
-        android:text=""
-        android:background="@color/black"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints" />
-    <EditText
-        android:id="@+id/angleankle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:inputType="none"
-        android:text=""
-        android:background="@color/black"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        tools:ignore="MissingConstraints" />
-
     <!-- Add EditText to display Error -->
     <EditText
         android:id="@+id/kneeError"
