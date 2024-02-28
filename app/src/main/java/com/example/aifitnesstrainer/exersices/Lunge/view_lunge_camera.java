@@ -236,8 +236,6 @@ public class view_lunge_camera extends AppCompatActivity {
                     String userName=user.getname();
                     user_goal lastUserGoal = databaseHelper.getUsergoalByEmail(userEmail);
                     EditText goalEditText = findViewById(R.id.goalEditText);
-                    EditText correct_scoree = findViewById(R.id.correct_score);
-                    EditText incorrect_scoree = findViewById(R.id.incorrect_score);
                     EditText goalright = findViewById(R.id.goalright);
                     EditText rightcorrect_scoree = findViewById(R.id.rightcorrect_score);
                     EditText rightincorrect_scoree = findViewById(R.id.rightincorrect_score);
@@ -346,7 +344,6 @@ public class view_lunge_camera extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(view_lunge_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                                 }
-
                             }
                         });
 
@@ -407,7 +404,7 @@ public class view_lunge_camera extends AppCompatActivity {
         int knee = 0;
         if (180 >= kneeAngle && kneeAngle >= 121) {
             knee = 1;
-        } else if (120 >= kneeAngle && kneeAngle >= 50) {
+        } else if (120 >= kneeAngle && kneeAngle >= 30) {
             knee = 2;
         }
         return knee;
@@ -442,11 +439,11 @@ public class view_lunge_camera extends AppCompatActivity {
         boolean leftcounted = true;
         boolean rightcounted = true;
         boolean counted = false;
-        int rightprevious_score = right_current_score;
-        int leftprevious_score = left_current_score;
+        int rightprevious_score = right_current_score-1;
+        int leftprevious_score = left_current_score-1;
         if ((seqState.get(0) == 2 && current_state == 1 && !complete_exercise)) {
 
-            if (smallestKneeAngle < 70 && smallestKneeLAngle>70 &&rightcounted) {
+            if (smallestKneeAngle < 70 && smallestKneeLAngle >70 && rightcounted) {
                 right_incorrect_score++;
                 userFeedback.add("Your right knee angle is too deep.");
                 speak.speak("This is an incorrect move because your right knee angle is too deep", TextToSpeech.QUEUE_FLUSH, null);
@@ -463,7 +460,7 @@ public class view_lunge_camera extends AppCompatActivity {
                 rightcounted=false;
                 leftcounted = true;
                 counted=true;
-             } else if(smallestKneeAngle < 120 && smallestKneeAngle > 70 && smallestKneeLAngle>100 &&rightcounted) {
+             } else if(smallestKneeAngle < 120 && smallestKneeAngle > 70 && smallestKneeLAngle>90 &&rightcounted) {
                 right_correct_score++;
                 speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
                 right_current_score++;
@@ -489,7 +486,7 @@ public class view_lunge_camera extends AppCompatActivity {
                 leftcounted = false;
                 rightcounted=true;
 
-            } else if(smallestKneeLAngle < 120 && smallestKneeLAngle > 70 && smallestKneeAngle>100 &&leftcounted){
+            } else if(smallestKneeLAngle < 120 && smallestKneeLAngle > 70 && smallestKneeAngle>90 &&leftcounted){
                 left_correct_score++;
                 left_current_score++;
                 speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
@@ -521,7 +518,6 @@ public class view_lunge_camera extends AppCompatActivity {
                 - Math.atan2(p1.y - p2.y, p1.x - p2.x);
         double angleInDeg = Math.abs(Math.toDegrees(angleInRad));
         angleInDeg = angleInDeg <= 180 ? angleInDeg : 360 - angleInDeg;
-
         return angleInDeg;
     }
     private void drawLineBetweenLandmarks(PoseLandmark landmark1, PoseLandmark landmark2) {

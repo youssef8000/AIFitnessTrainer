@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context) {
-        super(context, "DB.db", null, 1);
+        super(context, "appDB.db", null, 1);
     }
 
     @Override
@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "email TEXT UNIQUE," +
                     "name TEXT," +
+                    "phone TEXT," +
                     "password TEXT," +
                     "date TEXT)");
             MyDatabase.execSQL("CREATE TABLE set_goals(" +
@@ -53,11 +54,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-    public Boolean insertuser(String email,String name, String password,String birthdate){
+    public Boolean insertuser(String email,String name,String phone, String password,String birthdate){
         SQLiteDatabase MyDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("email", email);
         contentValues.put("name", name);
+        contentValues.put("phone", phone);
         contentValues.put("password", password);
         contentValues.put("date", birthdate);
         long result = MyDatabase.insert("users", null, contentValues);
@@ -105,12 +107,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 int idColumnIndex = cursor.getColumnIndex("id");
                 int emailColumnIndex = cursor.getColumnIndex("email");
                 int nameColumnIndex = cursor.getColumnIndex("name");
+                int phoneColumnIndex = cursor.getColumnIndex("phone");
                 int dateColumnIndex = cursor.getColumnIndex("date");
                 int userId = cursor.getInt(idColumnIndex);
                 String userEmail = cursor.getString(emailColumnIndex);
                 String name = cursor.getString(nameColumnIndex);
+                String phone = cursor.getString(phoneColumnIndex);
                 String userbirthdate = cursor.getString(dateColumnIndex);
-                user = new User(userId, userEmail,name,userbirthdate);
+                user = new User(userId, userEmail,name,phone,userbirthdate);
             }
         } catch (Exception e) {
             e.printStackTrace();

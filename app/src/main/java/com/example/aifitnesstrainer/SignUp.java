@@ -9,13 +9,14 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
 public class SignUp extends AppCompatActivity {
-    EditText signupName,signupEmail, signupPassword, signupConfirm,birthday;
+    EditText signupName,signupEmail, signupPhone,signupPassword, signupConfirm,birthday;
     DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +26,9 @@ public class SignUp extends AppCompatActivity {
         birthday=findViewById(R.id.signup_date);
         signupName = findViewById(R.id.signup_name);
         signupEmail = findViewById(R.id.signup_email);
-        signupPassword = findViewById(R.id.signup_password);
-        signupConfirm = findViewById(R.id.signup_confirm);
+        signupPhone = findViewById(R.id.signup_phone);
+//        signupPassword = findViewById(R.id.signup_password);
+//        signupConfirm = findViewById(R.id.signup_confirm);
         Calendar calendar1=Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -56,18 +58,20 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View view) {
                 String name = signupName.getText().toString();
                 String email = signupEmail.getText().toString();
-                String password = signupPassword.getText().toString();
-                String confirmPassword = signupConfirm.getText().toString();
+                String phone =signupPhone.getText().toString();
+                String randomPassword = generateRandomPassword();
+                String hashedPassword = hashPassword(randomPassword);
+                SendMail(email,name,phone,randomPassword);
                 String birthdate = birthday.getText().toString();
-                if (name.equals("") ||birthdate.equals("") ||email.equals("") || password.equals("") || confirmPassword.equals(""))
+                if (name.equals("") ||birthdate.equals("") ||email.equals("") || phone.equals(""))
                     Toast.makeText(SignUp.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
                 else {
-                    if (password.equals(confirmPassword)) {
+                    if (email.contains("@gmail.com")) {
                         Boolean checkUserEmail = databaseHelper.checkEmail(email);
                         if (!checkUserEmail) {
-                            Boolean insert = databaseHelper.insertuser(email,name, password, birthdate);
+                            Boolean insert = databaseHelper.insertuser(email,name,phone,hashedPassword,birthdate);
                             if (insert) {
-                                Toast.makeText(SignUp.this, "Signup Successfully!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUp.this, "Signup Successfully, please check your email to know your password", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(), Login.class);
                                 startActivity(intent);
                             } else {
@@ -76,8 +80,9 @@ public class SignUp extends AppCompatActivity {
                         } else {
                             Toast.makeText(SignUp.this, "User already exists! Please login", Toast.LENGTH_SHORT).show();
                         }
-                    } else {
-                        Toast.makeText(SignUp.this, "Invalid Password!", Toast.LENGTH_SHORT).show();
+                }
+                    else {
+                        Toast.makeText(SignUp.this, "Please enter a valid Gmail address", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -89,5 +94,43 @@ public class SignUp extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    private String generateRandomPassword() {
+        String allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890#@$!&*";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 8; i++) { // Generate an 8-character random password
+            int index = (int) (Math.random() * allowedChars.length());
+            sb.append(allowedChars.charAt(index));
+        }
+        return sb.toString();
+    }
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hashBytes = digest.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+            for (byte hashByte : hashBytes) {
+                String hex = Integer.toHexString(0xff & hashByte);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    private void SendMail(String email, String name,String phone,String password) {
+        String subject = "Your password to log in to the application";
+        String message = "Dear, " + name
+                + "\nYou SignUp successfully and this your data"
+                + "\nYour Name: " + name
+                + "\nYour email: " + email
+                + "\nYour Phone number: " + phone
+                + "\nYour password: " + password;
+        JavaMailAPI javaMailAPI = new JavaMailAPI(this, email, subject, message);
+        javaMailAPI.execute();
     }
 }

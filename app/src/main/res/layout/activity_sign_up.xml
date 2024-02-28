@@ -69,6 +69,23 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Phone number"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                android:textColor="@color/black"/>
+            <EditText
+                android:id="@+id/signup_phone"
+                android:layout_width="350dp"
+                android:layout_height="60dp"
+                android:background="@drawable/lavender_border"
+                android:drawablePadding="8dp"
+                android:hint="mobile no."
+                android:inputType="number"
+                android:padding="8dp"
+                android:textColor="@color/black" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="BirthDate"
                 android:layout_marginTop="20dp"
                 android:textSize="20sp"
@@ -86,40 +103,41 @@
                 android:hint="Pick your birthday date"
                 android:padding="8dp"
                 android:textColor="@color/black" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Password"
-                android:textSize="20sp"
-                android:layout_marginTop="20dp"
-                android:textColor="@color/black"/>
-            <EditText
-                android:id="@+id/signup_password"
-                android:layout_width="350dp"
-                android:layout_height="60dp"
-                android:background="@drawable/lavender_border"
-                android:drawablePadding="8dp"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:padding="8dp"
-                android:textColor="@color/black" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Confirm Password"
-                android:layout_marginTop="20dp"
-                android:textSize="20sp"
-                android:textColor="@color/black"/>
-            <EditText
-                android:id="@+id/signup_confirm"
-                android:layout_width="350dp"
-                android:layout_height="60dp"
-                android:background="@drawable/lavender_border"
-                android:drawablePadding="8dp"
-                android:hint="Confirm Password"
-                android:inputType="textPassword"
-                android:padding="8dp"
-                android:textColor="@color/black" />
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Password"-->
+<!--                android:textSize="20sp"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:textColor="@color/black"/>-->
+<!--            <EditText-->
+<!--                android:id="@+id/signup_password"-->
+<!--                android:layout_width="350dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:background="@drawable/lavender_border"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="Password"-->
+<!--                android:inputType="textPassword"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColor="@color/black" />-->
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Confirm Password"-->
+<!--                android:layout_marginTop="20dp"-->
+<!--                android:textSize="20sp"-->
+<!--                android:textColor="@color/black"/>-->
+<!--            <EditText-->
+<!--                android:id="@+id/signup_confirm"-->
+<!--                android:layout_width="350dp"-->
+<!--                android:layout_height="60dp"-->
+<!--                android:background="@drawable/lavender_border"-->
+<!--                android:drawablePadding="8dp"-->
+<!--                android:hint="Confirm Password"-->
+<!--                android:inputType="textPassword"-->
+<!--                android:padding="8dp"-->
+<!--                android:textColor="@color/black" />-->
 
             <Button
                 android:id="@+id/signup_button"

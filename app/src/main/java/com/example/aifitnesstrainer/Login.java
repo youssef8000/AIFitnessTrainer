@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class Login extends AppCompatActivity {
     EditText loginEmail, loginPassword;
     CheckBox remember;
@@ -22,7 +25,6 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         databaseHelper = new DatabaseHelper(this);
-
         loginEmail = findViewById(R.id.login_email);
         loginPassword = findViewById(R.id.login_password);
         signupRedirectText = findViewById(R.id.signupRedirectText);
@@ -40,10 +42,11 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 String email = loginEmail.getText().toString();
                 String password = loginPassword.getText().toString();
+                String hashedPassword = hashPassword(password);
                 if (email.equals("") || password.equals("")) {
                     Toast.makeText(Login.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
                 }else {
-                    Boolean checkCredentials = databaseHelper.checkEmailPassword(email, password);
+                    Boolean checkCredentials = databaseHelper.checkEmailPassword(email,hashedPassword);
                     if (checkCredentials) {
                         User loggedInUser = databaseHelper.getUserByEmail(email);
                         saveUserInfo(loggedInUser.getEmail(),loggedInUser.getId());
@@ -88,6 +91,33 @@ public class Login extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    // Method to hash the password using SHA-256
+    public static String hashPassword(String password) {
+        try {
+            // Create a MessageDigest instance for SHA-256
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+            // Apply the hashing function to the password bytes
+            byte[] hashBytes = digest.digest(password.getBytes());
+
+            // Convert the byte array to a hexadecimal string representation
+            StringBuilder hexString = new StringBuilder();
+            for (byte hashByte : hashBytes) {
+                String hex = Integer.toHexString(0xff & hashByte);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            // Return the hashed password
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            // Handle the case where SHA-256 algorithm is not available
+            e.printStackTrace();
+            return null;
+        }
     }
     private void saveUserInfo(String userEmail,int userId) {
         SharedPreferences preferences = getSharedPreferences("user_info", MODE_PRIVATE);
