@@ -46,7 +46,8 @@ public class SignUp extends AppCompatActivity {
         birthday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerDialog(SignUp.this,date,calendar1.get(Calendar.YEAR),calendar1.get(Calendar.MONTH),
+                new DatePickerDialog(SignUp.this,
+                        R.style.MyDatePickerDialogStyle,date,calendar1.get(Calendar.YEAR),calendar1.get(Calendar.MONTH),
                         calendar1.get(Calendar.DAY_OF_MONTH)).show();
             }
         });

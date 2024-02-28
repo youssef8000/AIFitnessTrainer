@@ -1,4 +1,4 @@
-package com.example.aifitnesstrainer;
+package com.example.aifitnesstrainer.exersices.Lunge;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,13 +10,12 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
-import android.os.CountDownTimer;
-import android.speech.tts.TextToSpeech;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
+import android.graphics.PointF;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +27,8 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +37,13 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.aifitnesstrainer.DatabaseHelper;
+import com.example.aifitnesstrainer.Display;
+import com.example.aifitnesstrainer.Feedback;
+import com.example.aifitnesstrainer.JavaMailAPI;
+import com.example.aifitnesstrainer.R;
+import com.example.aifitnesstrainer.User;
+import com.example.aifitnesstrainer.user_goal;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -51,17 +59,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 
-
-public class view_camera extends AppCompatActivity {
+public class view_lunge_camera extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     Button finish_squat;
     int PERMISSION_REQUESTS = 1;
@@ -84,8 +83,7 @@ public class view_camera extends AppCompatActivity {
     ArrayList<Pose> poseArrayList = new ArrayList<>();
     boolean isRunning = false;
     List<Integer> kneeAngles = new ArrayList<>();
-    List<Integer> hipAngles = new ArrayList<>();
-    List<Integer> ankleAngles = new ArrayList<>();
+    List<Integer> kneelAngles = new ArrayList<>();
     List<Integer> seqState = new ArrayList<>();
     List<String> userFeedback = new ArrayList<>();
     TextToSpeech speak;
@@ -94,11 +92,17 @@ public class view_camera extends AppCompatActivity {
     int current_score=0;
     int incorrect_score=0;
     int correct_score=0;
+    int right_current_score=0;
+    int right_incorrect_score=0;
+    int right_correct_score=0;
+    int left_current_score=0;
+    int left_incorrect_score=0;
+    int left_correct_score=0;
     @ExperimentalGetImage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_camera);
+        setContentView(R.layout.activity_view_lunge_camera);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         previewView = findViewById(R.id.preview);
         display = findViewById(R.id.display);
@@ -168,7 +172,6 @@ public class view_camera extends AppCompatActivity {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-
                 }
             });
         }
@@ -204,12 +207,6 @@ public class view_camera extends AppCompatActivity {
                     for (PoseLandmark poseLandmark : poseArrayList.get(0).getAllPoseLandmarks()) {
 
                         if (poseLandmark.getLandmarkType() == PoseLandmark.NOSE ||
-                               poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_SHOULDER ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_ELBOW ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_WRIST ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_HIP ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_KNEE ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_ANKLE ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_PINKY ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_PINKY ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_INDEX ||
@@ -218,7 +215,6 @@ public class view_camera extends AppCompatActivity {
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_THUMB ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_HEEL ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_HEEL ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_FOOT_INDEX ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_EYE_INNER ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_EYE ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_EYE_OUTER ||
@@ -242,6 +238,12 @@ public class view_camera extends AppCompatActivity {
                     EditText goalEditText = findViewById(R.id.goalEditText);
                     EditText correct_scoree = findViewById(R.id.correct_score);
                     EditText incorrect_scoree = findViewById(R.id.incorrect_score);
+                    EditText goalright = findViewById(R.id.goalright);
+                    EditText rightcorrect_scoree = findViewById(R.id.rightcorrect_score);
+                    EditText rightincorrect_scoree = findViewById(R.id.rightincorrect_score);
+                    EditText goalleft = findViewById(R.id.goalleft);
+                    EditText leftcorrect_scoree = findViewById(R.id.leftcorrect_score);
+                    EditText leftincorrect_scoree = findViewById(R.id.leftincorrect_score);
                     int goal = lastUserGoal.getgoal();
 
                     PoseLandmark elbowr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_ELBOW);
@@ -251,10 +253,17 @@ public class view_camera extends AppCompatActivity {
                     PoseLandmark kneer = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_KNEE);
                     PoseLandmark ankler = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_ANKLE);
                     PoseLandmark footr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_FOOT_INDEX);
+                    PoseLandmark elbowl = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_ELBOW);
+                    PoseLandmark wristl = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_WRIST);
+                    PoseLandmark shoulderl = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_SHOULDER);
+                    PoseLandmark hipl = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_HIP);
+                    PoseLandmark kneel = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_KNEE);
+                    PoseLandmark anklel = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_ANKLE);
+                    PoseLandmark footl = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_FOOT_INDEX);
+
                     EditText errormessage = findViewById(R.id.errorEditText);
                     EditText ErrorKneeMessage = findViewById(R.id.kneeError);
                     EditText ErrorHipMessage = findViewById(R.id.hipError);
-                    EditText ErrorAnkleMessage = findViewById(R.id.ankleError);
 
                     if (hipr != null && kneer != null && ankler != null && shoulderr != null && wristr != null
                             && elbowr != null&& footr != null) {
@@ -264,39 +273,49 @@ public class view_camera extends AppCompatActivity {
                         drawLineBetweenLandmarks(hipr, kneer);
                         drawLineBetweenLandmarks(kneer, ankler);
                         drawLineBetweenLandmarks(ankler,footr);
+                        drawLineBetweenLandmarks(shoulderr,shoulderl);
+                        drawLineBetweenLandmarks(wristl,elbowl);
+                        drawLineBetweenLandmarks(elbowl,shoulderl);
+                        drawLineBetweenLandmarks(shoulderl,hipl);
+                        drawLineBetweenLandmarks(hipl,kneel);
+                        drawLineBetweenLandmarks(kneel,anklel);
+                        drawLineBetweenLandmarks(anklel,footl);
 
-                        double[] hipCoord = { hipr.getPosition().x, hipr.getPosition().y };
-                        double[] shoulderCoord = { shoulderr.getPosition().x,  shoulderr.getPosition().y };
-                        double[] kneeCoord = { kneer.getPosition().x, kneer.getPosition().y };
-                        double[] ankleCoord = { ankler.getPosition().x, ankler.getPosition().y };
-
-                        double kneeAngleDegrees = CalculateAngle(hipCoord, new double[]{ kneeCoord[0], 0 }, kneeCoord);
-                        double hipAngleDegrees = CalculateAngle(shoulderCoord, new double[]{ hipCoord[0], 0 }, hipCoord);
-                        double ankleAngleDegrees = CalculateAngle(kneeCoord, new double[]{ ankleCoord[0], 0 }, ankleCoord);
-
+                        float[] hipCoord = { hipr.getPosition().x, hipr.getPosition().y };
+                        float[] kneeCoord = { kneer.getPosition().x, kneer.getPosition().y };
+                        float[] ankleCoord = { ankler.getPosition().x, ankler.getPosition().y };
+                        double kneeAngleDegrees = CalculateAngle(hipCoord, kneeCoord, ankleCoord);
                         int roundedKneeFlexionAngle = (int) Math.round(kneeAngleDegrees);
-                        int roundedHipFlexionAngle = (int) Math.round(hipAngleDegrees);
-                        int roundedAnkleDorsiflexionAngle = (int) Math.round(ankleAngleDegrees);
-
                         kneeAngles.add(roundedKneeFlexionAngle);
-                        hipAngles.add(roundedHipFlexionAngle);
-                        ankleAngles.add(roundedAnkleDorsiflexionAngle);
-                        Collections.sort(kneeAngles, Collections.reverseOrder());
-                        int greatestKneeAngle = !kneeAngles.isEmpty() ? kneeAngles.get(0) : 0;
-                        Collections.sort(hipAngles, Collections.reverseOrder());
-                        int greatestHipAngle = !hipAngles.isEmpty() ? hipAngles.get(0) : 0;
-                        Collections.sort(ankleAngles, Collections.reverseOrder());
-                        int greatestAnkleAngle = !ankleAngles.isEmpty() ? ankleAngles.get(0) : 0;
+                        Collections.sort(kneeAngles);
+                        int smallestKneeAngle = !kneeAngles.isEmpty() ? kneeAngles.get(0) : 0;
+
+                        float[] hiplCoord = { hipl.getPosition().x, hipl.getPosition().y };
+                         float[] kneelCoord = { kneel.getPosition().x, kneel.getPosition().y };
+                        float[] anklelCoord = { anklel.getPosition().x, anklel.getPosition().y };
+                        double kneelAngle = CalculateAngle(hiplCoord,kneelCoord, anklelCoord);
+                        int roundedKneel = (int) Math.round(kneelAngle);
+                        kneelAngles.add(roundedKneel);
+                        Collections.sort(kneelAngles);
+                        int smallestKneelAngle = !kneelAngles.isEmpty() ? kneelAngles.get(0) : 0;
+
                         int current_state = getState(roundedKneeFlexionAngle);
                         if (!seqState.contains(current_state)) {
                             seqState.add(current_state);
                         }
                         Collections.sort(seqState, Collections.reverseOrder());
-                        CountRepetitions(greatestKneeAngle, greatestHipAngle, greatestAnkleAngle, current_state, complete_exercise);
+                        CountRepetitions(smallestKneeAngle,smallestKneelAngle, current_state, complete_exercise);
 
                         goalEditText.setText("Goal: "+current_score+" / "+goal);
-                        correct_scoree.setText("Correct: "+correct_score);
-                        incorrect_scoree.setText("InCorrect: "+incorrect_score);
+
+                        goalright.setText("Right Goal: "+right_current_score+" / "+goal);
+                        rightcorrect_scoree.setText("Correct: "+right_correct_score);
+                        rightincorrect_scoree.setText("InCorrect: "+right_incorrect_score);
+
+                        goalleft.setText("Left Goal: "+left_current_score+" / "+goal);
+                        leftcorrect_scoree.setText("Correct: "+left_correct_score);
+                        leftincorrect_scoree.setText("InCorrect: "+left_incorrect_score);
+
                         if(current_score==goal && !feedbackSpoken){
                             finish_squat.setVisibility(View.VISIBLE);
                             speak.speak("You finish your exercise please press the button to see feedback about your moves",TextToSpeech.QUEUE_ADD,null);
@@ -309,52 +328,38 @@ public class view_camera extends AppCompatActivity {
                                 String email = userEmail.toString();
                                 String ex_name = lastUserGoal.getname().toString();
                                 int goal = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
-                                int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
-                                int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
+                                int rightcorrectScore = Integer.parseInt(rightcorrect_scoree.getText().toString().split(": ")[1]);
+                                int leftcorrectScore = Integer.parseInt(leftcorrect_scoree.getText().toString().split(": ")[1]);
+                                int correctScore = (rightcorrectScore+leftcorrectScore)/2;
+                                int rightincorrectScore = Integer.parseInt(rightincorrect_scoree.getText().toString().split(": ")[1]);
+                                int leftincorrectScore = Integer.parseInt(leftincorrect_scoree.getText().toString().split(": ")[1]);
+                                int incorrectScore = (rightincorrectScore+leftincorrectScore)/2;
                                 double accuracy = (double) correctScore / (correctScore + incorrectScore);
                                 String workoutFeedback = TextUtils.join(", ", userFeedback);
-                                SendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
+                                SendMail(email, userName, ex_name, goal, correctScore, incorrectScore,
+                                        rightcorrectScore, leftcorrectScore,rightincorrectScore, leftincorrectScore,accuracy, workoutFeedback);
                                 boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
                                 if (inserted) {
-                                    Toast.makeText(view_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(view_lunge_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), Feedback.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(view_lunge_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
                         });
-                        // Define the starting and ending points for the vertical line
-                        float hipStartX = (float) hipCoord[0];
-                        float hipStartY = (float) hipCoord[1] - 50;
-                        float hipEndY = (float) hipCoord[1] + 20;
-                        float kneeStartX = (float) kneeCoord[0];
-                        float kneeStartY = (float) kneeCoord[1] - 50;
-                        float kneeEndY = (float) kneeCoord[1] + 20;
-                        float ankleStartX = (float) ankleCoord[0];
-                        float ankleStartY = (float) ankleCoord[1] - 50;
-                        float ankleEndY = (float) ankleCoord[1] + 20;
-
-                        // Create a Paint object for drawing the line
-                        Paint linePaint = new Paint();
-                        linePaint.setColor(Color.BLACK);
-                        linePaint.setStrokeWidth(3);
-
-                        // Draw the vertical line on the bitmap
-                        canvas.drawLine(kneeStartX, kneeStartY, kneeStartX, kneeEndY, linePaint);
-                        canvas.drawLine(hipStartX, hipStartY, hipStartX, hipEndY, linePaint);
-                        canvas.drawLine(ankleStartX, ankleStartY, ankleStartX, ankleEndY, linePaint);
-
-                        // Draw the dotted line at the ankle coordinate
-                        drawDottedLine(bitmap, hipCoord, hipCoord[1] - 50, hipCoord[1] + 20, Color.BLACK);
-                        drawDottedLine(bitmap, kneeCoord, kneeCoord[1] - 50, kneeCoord[1] + 20, Color.BLACK);
-                        drawDottedLine(bitmap, ankleCoord, ankleCoord[1] - 50, ankleCoord[1] + 20, Color.WHITE); // Adjust color as needed
 
                         errormessage.setText("");
-                        DetectMovement(roundedKneeFlexionAngle, roundedHipFlexionAngle, roundedAnkleDorsiflexionAngle,
-                                hipr, kneer, shoulderr, ankler,
-                                ErrorKneeMessage, ErrorHipMessage, ErrorAnkleMessage);
+                        EditText Kneangle = findViewById(R.id.kneeangle);
+                        Kneangle.setText("right Knee: "+smallestKneeAngle+" / "+roundedKneeFlexionAngle
+                                +" / "+current_state
+                                +" / "+seqState.get(0));
+                        EditText hipangle = findViewById(R.id.hipangle);
+                        hipangle.setText("left Knee: "+smallestKneelAngle+" /: "+roundedKneel);
+
+                        DetectMovement(roundedKneeFlexionAngle,roundedKneel,hipr, kneer, hipl, kneel,
+                                ErrorKneeMessage, ErrorHipMessage);
 
                     } else {
                         errormessage.setText("Some landmarks are missing for squat detection");
@@ -380,14 +385,18 @@ public class view_camera extends AppCompatActivity {
         });
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
     }
-    private void SendMail(String email, String userName,String ex_name, int goal, int correctScore, int incorrectScore, double accuracy, String workoutFeedback) {
-        String subject = "Feedback about your training for this exercise";
+    private void SendMail(String email, String userName,String ex_name, int goal, int correctScore, int incorrectScore,
+                          int rightcorrectScore,int leftcorrectScore,int rightincorrectScore,int leftincorrectScore,
+                          double accuracy, String workoutFeedback) {
+        String subject = "Feedback about your training for this exercise" + ex_name;
         String message = "Dear, " + userName
                 + "\nYou've finished your workout and here are our training notes for this workout"
                 + "\nExercise Name: " + ex_name
                 + "\nYour Goal: " + goal
-                + "\nYour Correct repetition: " + correctScore
-                + "\nYour Incorrect repetition: " + incorrectScore
+                + "\nYour Correct repetition at right leg: " + rightcorrectScore
+                + "\nYour Incorrect repetition at right leg: " + rightincorrectScore
+                + "\nYour Correct repetition at left leg: " + leftcorrectScore
+                + "\nYour Incorrect repetition at left leg: " + leftincorrectScore
                 + "\nOur Feedback: " + workoutFeedback
                 + "\nYour Accuracy: " + (accuracy*100)+"%"
                 + "\nKeep going and do your best.";
@@ -396,116 +405,124 @@ public class view_camera extends AppCompatActivity {
     }
     private int getState(int kneeAngle) {
         int knee = 0;
-        if (0 <= kneeAngle && kneeAngle <= 32) {
+        if (180 >= kneeAngle && kneeAngle >= 121) {
             knee = 1;
-        } else if (35 <= kneeAngle && kneeAngle <= 65) {
+        } else if (120 >= kneeAngle && kneeAngle >= 50) {
             knee = 2;
-        } else if (70 <= kneeAngle && kneeAngle <= 95) {
-            knee = 3;
         }
         return knee;
     }
-    private void DetectMovement(int roundedKneeFlexionAngle, int roundedHipFlexionAngle, int roundedAnkleDorsiflexionAngle,
-                                     PoseLandmark hipr, PoseLandmark kneer, PoseLandmark shoulderr, PoseLandmark ankler,
-                                     EditText ErrorKneeMessage, EditText ErrorHipMessage, EditText ErrorAnkleMessage) {
+    private void DetectMovement(int roundedKneeFlexionAngle, int roundedKneel,
+                                PoseLandmark hipr, PoseLandmark kneer, PoseLandmark hipl, PoseLandmark kneel,
+                                EditText ErrorKneeMessage, EditText ErrorleftkneeMessage) {
         // Update Knee Message
-        if (roundedKneeFlexionAngle > 95) {
-            ErrorKneeMessage.setText("Squat To Deep");
+        if (roundedKneeFlexionAngle < 70) {
+            ErrorKneeMessage.setText("right knee angle is too deep");
             drawErrorLineBetweenLandmarks(hipr, kneer);
-        } else if (roundedKneeFlexionAngle > 50 && roundedKneeFlexionAngle < 80) {
+        } else if (roundedKneeFlexionAngle > 120 && roundedKneeFlexionAngle < 160) {
             ErrorKneeMessage.setText("Lower Your Hip");
             drawErrorLineBetweenLandmarks(hipr, kneer);
         } else {
             ErrorKneeMessage.setText("");
             drawLineBetweenLandmarks(hipr, kneer);
         }
-        // Update Hip Message
-        if (roundedHipFlexionAngle > 45) {
-            ErrorHipMessage.setText("Bend Backward");
-            drawErrorLineBetweenLandmarks(shoulderr, hipr);
-        } else if (roundedHipFlexionAngle < 20 && roundedHipFlexionAngle > 10) {
-            ErrorHipMessage.setText("Bend Forward");
-            drawErrorLineBetweenLandmarks(shoulderr, hipr);
+        // Update Knee Message
+        if (roundedKneel < 70) {
+            ErrorleftkneeMessage.setText("left knee angle is too deep");
+            drawErrorLineBetweenLandmarks(hipl, kneel);
+        } else if (roundedKneel > 120 && roundedKneel < 160 ) {
+            ErrorleftkneeMessage.setText("Lower Your Hip");
+            drawErrorLineBetweenLandmarks(hipl, kneel);
         } else {
-            ErrorHipMessage.setText("");
-            drawLineBetweenLandmarks(shoulderr, hipr);
-        }
-        // Update Ankle Message
-        if (roundedAnkleDorsiflexionAngle > 40) {
-            ErrorAnkleMessage.setText("Knee Falling Over Toe");
-            drawErrorLineBetweenLandmarks(kneer, ankler);
-        } else {
-            ErrorAnkleMessage.setText("");
-            drawLineBetweenLandmarks(kneer, ankler);
+            ErrorleftkneeMessage.setText("");
+            drawLineBetweenLandmarks(hipl, kneel);
         }
     }
-    private void CountRepetitions(int greatestKneeAngle, int greatestHipAngle, int greatestAnkleAngle,
-                                  int current_state, boolean complete_exercise) {
-        if ((seqState.get(0) == 3 && current_state == 1 && !complete_exercise) ||
-                (seqState.get(0) == 2 && current_state == 1 && !complete_exercise)) {
-            int previous_score = current_score;
-            current_score++;
-            int new_score = current_score;
-            if (greatestKneeAngle > 95) {
-                incorrect_score++;
-                userFeedback.add("Your knee angle is too deep.");
-                speak.speak("This is an incorrect move because your knee angle is too deep", TextToSpeech.QUEUE_FLUSH, null);
-            } else if (greatestKneeAngle > 50 && greatestKneeAngle < 80) {
-                incorrect_score++;
-                userFeedback.add("Lower your hip to correct the knee angle.");
-                speak.speak("This is an incorrect move because Lower your hip to correct the knee angle", TextToSpeech.QUEUE_FLUSH, null);
-            } else if (greatestHipAngle > 45) {
-                incorrect_score++;
-                userFeedback.add("You are bending backward.");
-                speak.speak("This is an incorrect move because You are bending backward", TextToSpeech.QUEUE_FLUSH, null);
-            } else if (greatestHipAngle < 20 && greatestHipAngle > 10) {
-                incorrect_score++;
-                userFeedback.add("You are bending forward.");
-                speak.speak("This is an incorrect move because You are bending forward", TextToSpeech.QUEUE_FLUSH, null);
-            } else if (greatestAnkleAngle > 40) {
-                incorrect_score++;
-                userFeedback.add("Your knee is falling over your toe.");
-                speak.speak("This is an incorrect move because Your knee is falling over your toe", TextToSpeech.QUEUE_FLUSH, null);
-            } else {
-                correct_score++;
+    private void CountRepetitions(int smallestKneeAngle, int smallestKneeLAngle,int current_state, boolean complete_exercise) {
+        boolean leftcounted = true;
+        boolean rightcounted = true;
+        boolean counted = false;
+        int rightprevious_score = right_current_score;
+        int leftprevious_score = left_current_score;
+        if ((seqState.get(0) == 2 && current_state == 1 && !complete_exercise)) {
+
+            if (smallestKneeAngle < 70 && smallestKneeLAngle>70 &&rightcounted) {
+                right_incorrect_score++;
+                userFeedback.add("Your right knee angle is too deep.");
+                speak.speak("This is an incorrect move because your right knee angle is too deep", TextToSpeech.QUEUE_FLUSH, null);
+                right_current_score++;
+                rightcounted=false;
+                leftcounted = true;
+                counted=true;
+
+            } else if (smallestKneeAngle > 120 && smallestKneeLAngle<120 &&rightcounted) {
+                right_incorrect_score++;
+                userFeedback.add("Lower your hip to correct the right knee angle.");
+                speak.speak("This is an incorrect move because Lower your hip to correct the right knee angle", TextToSpeech.QUEUE_FLUSH, null);
+                right_current_score++;
+                rightcounted=false;
+                leftcounted = true;
+                counted=true;
+             } else if(smallestKneeAngle < 120 && smallestKneeAngle > 70 && smallestKneeLAngle>100 &&rightcounted) {
+                right_correct_score++;
                 speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
+                right_current_score++;
+                rightcounted=false;
+                leftcounted = true;
+                counted=true;
             }
 
-            if (new_score > previous_score) {
+            if (smallestKneeLAngle < 70  && smallestKneeAngle>70 &&leftcounted) {
+                left_incorrect_score++;
+                left_current_score++;
+                userFeedback.add("Your left knee angle is too deep.");
+                speak.speak("This is an incorrect move because your left knee angle is too deep", TextToSpeech.QUEUE_FLUSH, null);
+                leftcounted = false;
+                rightcounted=true;
+                counted=true;
+
+            } else if (smallestKneeLAngle > 120 && smallestKneeAngle < 120 &&leftcounted) {
+                left_incorrect_score++;
+                left_current_score++;
+                userFeedback.add("Lower your hip to correct the left knee angle.");
+                speak.speak("This is an incorrect move because Lower your hip to correct the left knee angle", TextToSpeech.QUEUE_FLUSH, null);
+                leftcounted = false;
+                rightcounted=true;
+
+            } else if(smallestKneeLAngle < 120 && smallestKneeLAngle > 70 && smallestKneeAngle>100 &&leftcounted){
+                left_correct_score++;
+                left_current_score++;
+                speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
+                leftcounted = false;
+                rightcounted=true;
+                counted=true;
+
+            }
+            int right_new_score = right_current_score;
+            int leftnew_score = left_current_score;
+            if ((leftnew_score > leftprevious_score) || (right_new_score > rightprevious_score)) {
                 // Clear all lists
                 kneeAngles.clear();
-                hipAngles.clear();
-                ankleAngles.clear();
+                kneelAngles.clear();
                 seqState.clear();
-                seqState.add(0); // Add the initial state or any appropriate value
+                seqState.add(0);
+            }
+            if(right_current_score>=0 && left_current_score>=0 && right_current_score==left_current_score&&counted){
+                current_score++;
+                counted=false;
             }
         }
     }
-    public static void drawDottedLine(Bitmap bitmap, double[] lmCoord, double start, double end, int color) {
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        paint.setColor(color);
-        paint.setStrokeWidth(2);
-        int pixStep = 0;
-        for (int i = (int) start; i <= end; i += 8) {
-            canvas.drawCircle((float) lmCoord[0], i + pixStep, 2, paint);
-        }
-    }
-    public static double CalculateAngle(double[] p1, double[] p2, double[] refPt) {
-        double[] p1Ref = { p1[0] - refPt[0], p1[1] - refPt[1] };
-        double[] p2Ref = { p2[0] - refPt[0], p2[1] - refPt[1] };
-        double cosTheta = dotProduct(p1Ref, p2Ref) / (1.0 * norm(p1Ref) * norm(p2Ref));
-        double theta = Math.acos(clamp(cosTheta, -1.0, 1.0));
-        return Math.toDegrees(theta);
-    }
-    public static double dotProduct(double[] vec1, double[] vec2) {
-        return vec1[0] * vec2[0] + vec1[1] * vec2[1];
-    }
-    public static double norm(double[] vec) {
-        return Math.sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
-    }
-    public static double clamp(double value, double min, double max) {
-        return Math.max(min, Math.min(max, value));
+    public static double CalculateAngle(float[] point1, float[] point2, float[] point3) {
+        PointF p1 = new PointF(point1[0], point1[1]);
+        PointF p2 = new PointF(point2[0], point2[1]);
+        PointF p3 = new PointF(point3[0], point3[1]);
+        double angleInRad = Math.atan2(p3.y - p2.y, p3.x - p2.x)
+                - Math.atan2(p1.y - p2.y, p1.x - p2.x);
+        double angleInDeg = Math.abs(Math.toDegrees(angleInRad));
+        angleInDeg = angleInDeg <= 180 ? angleInDeg : 360 - angleInDeg;
+
+        return angleInDeg;
     }
     private void drawLineBetweenLandmarks(PoseLandmark landmark1, PoseLandmark landmark2) {
         if (landmark1 != null && landmark2 != null) {

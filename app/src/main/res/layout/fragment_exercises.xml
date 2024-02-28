@@ -57,7 +57,7 @@
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="250dp"
                         android:src="@drawable/bicep_curl"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
@@ -100,7 +100,7 @@
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="250dp"
                         android:src="@drawable/push_up"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
@@ -142,7 +142,7 @@
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="250dp"
                         android:src="@drawable/shoulder_press"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
@@ -184,7 +184,7 @@
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="250dp"
                         android:src="@drawable/squat"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
@@ -226,7 +226,7 @@
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="200dp"
+                        android:layout_height="250dp"
                         android:src="@drawable/lateral_raise"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
@@ -244,6 +244,48 @@
                         android:layout_height="wrap_content"
                         android:text="Start exercise"
                         android:id="@+id/lateral_raises"
+                        android:layout_marginTop="8dp"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardElevation="10dp"
+                app:cardCornerRadius="20dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardMaxElevation="12dp"
+                android:layout_marginTop="5dp"
+                app:cardPreventCornerOverlap="true"
+                app:cardUseCompatPadding="true">
+
+                <!-- Linear layout to contain image, text, and button -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <!-- Image view -->
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:src="@drawable/lunge_exercise"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="Image description"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Lunge"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
+
+                    <!-- Button -->
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start exercise"
+                        android:id="@+id/lunge"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
