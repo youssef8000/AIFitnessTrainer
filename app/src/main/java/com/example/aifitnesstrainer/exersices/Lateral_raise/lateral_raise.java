@@ -1,4 +1,4 @@
-package com.example.aifitnesstrainer;
+package com.example.aifitnesstrainer.exersices.Lateral_raise;
 
 import android.os.Bundle;
 
@@ -9,13 +9,12 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 
-import com.example.aifitnesstrainer.exersices.Lateral_raise.lateral_raise;
-import com.example.aifitnesstrainer.exersices.Lunge.lunge_exercise;
+import com.example.aifitnesstrainer.R;
 
-
-public class exercises extends Fragment {
+public class lateral_raise extends Fragment {
 
     private void openFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
@@ -24,34 +23,21 @@ public class exercises extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
-    public exercises() {
+    public lateral_raise() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_exercises, container, false);
-        Button squat_exercise=view.findViewById(R.id.Squat);
-        Button lunge_exercise=view.findViewById(R.id.lunge);
-        Button lateral_raises=view.findViewById(R.id.lateral_raises);
-
-        squat_exercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFragment(new squat_exercise());
-            }
-        });
-        lunge_exercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFragment(new lunge_exercise());
-            }
-        });
+        View view= inflater.inflate(R.layout.fragment_lateral_raise, container, false);
+        WebView gifWebView = view.findViewById(R.id.gifWebView);
+        gifWebView.loadUrl("file:///android_res/drawable/squat_video.gif");
+        Button lateral_raises=view.findViewById(R.id.lateral_raises_camera);
         lateral_raises.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFragment(new lateral_raise());
+                openFragment(new lateral_raises_goal());
             }
         });
         return view;
