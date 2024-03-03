@@ -20,6 +20,9 @@
         android:theme="@style/Theme.AIFitnessTrainer"
         tools:targetApi="31">
         <activity
+            android:name=".exersices.ShoulderPress.ShoulderPress_camera"
+            android:exported="false" />
+        <activity
             android:name=".exersices.Lateral_raise.view_LateralRaise_camera"
             android:exported="false" />
         <activity

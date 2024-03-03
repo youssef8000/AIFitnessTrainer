@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.example.aifitnesstrainer.exersices.Lateral_raise.lateral_raise;
 import com.example.aifitnesstrainer.exersices.Lunge.lunge_exercise;
+import com.example.aifitnesstrainer.exersices.ShoulderPress.shoulderPress_exercise;
 
 
 public class exercises extends Fragment {
@@ -35,6 +36,7 @@ public class exercises extends Fragment {
         Button squat_exercise=view.findViewById(R.id.Squat);
         Button lunge_exercise=view.findViewById(R.id.lunge);
         Button lateral_raises=view.findViewById(R.id.lateral_raises);
+        Button ShoulderPress=view.findViewById(R.id.Shoulder_press);
 
         squat_exercise.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +54,12 @@ public class exercises extends Fragment {
             @Override
             public void onClick(View v) {
                 openFragment(new lateral_raise());
+            }
+        });
+        ShoulderPress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragment(new shoulderPress_exercise());
             }
         });
         return view;
