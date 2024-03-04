@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view_camera">
+    tools:context=".exersices.squat.squat_view_camera">
 
     <androidx.camera.view.PreviewView
         android:layout_width="match_parent"
@@ -70,7 +70,7 @@
             android:textStyle="bold"
             android:textSize="25dp"
             android:visibility="invisible"
-             />
+            />
     </LinearLayout>
 
     <!-- Add EditText to display Error -->

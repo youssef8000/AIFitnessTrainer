@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.example.aifitnesstrainer.DatabaseHelper;
 import com.example.aifitnesstrainer.R;
-import com.example.aifitnesstrainer.view_camera;
 
 public class lateral_raises_goal extends Fragment {
 

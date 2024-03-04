@@ -13,7 +13,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 
 import com.example.aifitnesstrainer.R;
-import com.example.aifitnesstrainer.squat_goal;
 
 public class lunge_exercise extends Fragment {
 

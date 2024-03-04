@@ -18,7 +18,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="lateral_raises"
+                android:text="Lateral Raises"
                 android:textStyle="bold"
                 android:textSize="30dp"
                 android:textColor="@color/black"
@@ -43,8 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Benefits of air squats
-"
+                android:text="Benefits of Lateral Raises"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@color/black"
@@ -55,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Air squats are a great way to learn the proper form for squats. Once you’ve mastered them, you can move on to weighted squats safely and with a much smaller risk of injury."
+                android:text="Lateral raises contribute to sculpting well-defined shoulders and upper arms, providing a rounded aesthetic. Beyond enhancing appearance, these exercises boost shoulder mobility, broaden the range of motion, and enhance stability."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
@@ -65,7 +64,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Air squats also help to build both a solid strength foundation and balance in your lower body. They target your thighs, hamstrings, quadriceps, and glutes in particular, helping you to add muscle mass in these areas. Because balance is necessary, air squats can also engage your core."
+                android:text="Improved shoulder functionality is advantageous for performing various lifts and presses more effectively. Additionally, the unilateral nature of lateral raises allows targeted training for each shoulder side, enabling the identification and correction of potential muscle imbalances between the right and left sides through focused workouts."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
@@ -75,7 +74,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="How to Do a Air Squat Correctly?"
+                android:text="How to Do a Lateral Raises Correctly?"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@color/black"
@@ -86,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1-Stand with your feet about shoulder-width apart, toes forward, and knees over your second and third toes."
+                android:text="1-Your starting position will be standing with dumbbells (or another piece of equipment) in your closed fists. Your thumbs should be around the handles with your palms facing your body. Set the dumbbells alongside your thighs with your elbows barely bent. Your feet should be set about hip-width apart or in a split-stance position."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
@@ -96,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2-Lower your butt toward the floor by hinging at the hips and bending at the knees, making sure your knees track over the second and third toes and keeping your heels on the ground. As you do this, allow your glutes to push back and out behind your body as if you’re sitting into a chair. Keep your chest up and head and neck in a neutral position. Lower to a depth that allows you to maintain proper form. For some individuals, that may be at a point where their thighs are parallel with the floor, while others may not be able to go nearly that low."
+                android:text="2-Tighten your core to brace yourself, pull your shoulders down and back, and maintain this position during the entire exercise. Your head should be aligned straight with your spine."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
@@ -106,7 +105,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3-Push into your feet to push your body back up and away from the floor to stand up, moving your hips forward until you’ve returned to starting position."
+                android:text="3-Breathe out as you slowly bring your dumbbells up and out to the side. Your elbows and the upper part of your arm should lift together and stick out slightly in front of your lower arm and the dumbbells. "
+                android:textSize="18dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4-Once your arms reach shoulder level, rotate them upwards a bit so that the front edge of the dumbbells are now pointed slightly up. Keep lifting the weights up until your shoulders and arms are level with each other and parallel with the ground. Make sure that your core is still braced so that your lower back doesn’t arch and that your wrist position is comfortable so you don’t overextend or injure your wrists."
+                android:textSize="18dp"
+                android:textColor="@color/black"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5-Breathe in and slowly lower the dumbbells down to your starting position. Your elbows should still be extended a little bit, and your feet, core, shoulder, and wrist positions shouldn’t change as you release the weights down and rotate them back to where you started."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"

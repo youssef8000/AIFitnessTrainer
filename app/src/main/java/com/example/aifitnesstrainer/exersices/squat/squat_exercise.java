@@ -1,4 +1,4 @@
-package com.example.aifitnesstrainer;
+package com.example.aifitnesstrainer.exersices.squat;
 
 import android.os.Bundle;
 
@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Button;
 
-public class squat_exercise extends Fragment {
+import com.example.aifitnesstrainer.R;
 
+public class squat_exercise extends Fragment {
     private void openFragment(Fragment fragment) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -28,6 +29,7 @@ public class squat_exercise extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_squat_exercise, container, false);
         WebView gifWebView = view.findViewById(R.id.gifWebView);
         gifWebView.loadUrl("file:///android_res/drawable/squat_video.gif");
@@ -35,7 +37,7 @@ public class squat_exercise extends Fragment {
         squat_exercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFragment(new squat_goal());
+                openFragment(new squatGoal());
             }
         });
         return view;

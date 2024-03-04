@@ -18,7 +18,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lunge"
+                android:text="Shoulder Press"
                 android:textStyle="bold"
                 android:textSize="30dp"
                 android:textColor="@color/black"
@@ -43,8 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Benefits of lunge
-"
+                android:text="Benefits of Shoulder Press"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@color/black"
@@ -55,27 +54,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lunges are a powerful and well-liked exercise for the lower body. This adaptable exercise routine builds a range of muscle groups and enhances your general health and fitness in different ways."
+                android:text="Shoulder press workouts primarily target the deltoid muscles, which are responsible for shoulder movement and stability. The benefits include increased shoulder strength, improved upper body stability, enhanced posture, and potentially reduced risk of shoulder injuries. Additionally, shoulder press exercises can also engage other upper body muscles such as the triceps and upper chest, leading to overall upper body strength and muscle development."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
                 android:padding="10dp"
                 />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lunges have a variety of health benefits, including improving balance, coordination, and flexibility as well as increasing strength and muscular definition. Individuals of all fitness levels can perform these straightforward but efficient workouts, which can also be customized to meet your unique objectives and demands."
-                android:textSize="18dp"
-                android:textColor="@color/black"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:padding="10dp"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="How to Do a lunge Correctly?"
+                android:text="How to Do a Shoulder Press Correctly?"
                 android:textStyle="bold"
                 android:textSize="20dp"
                 android:textColor="@color/black"
@@ -86,7 +76,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1-Stand facing forward, hands on hips."
+                android:text="1-Start by sitting or standing with a straight back, holding a dumbbell in each hand at shoulder height, palms facing forward."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
@@ -96,7 +86,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2-Lunge forward with your left leg and lower your body by flexing the right knee and hip until your right knee almost touches the floor. Keep your torso upright throughout."
+                android:text="2-Engage your core muscles for stability."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
@@ -106,7 +96,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3-Your lead knee should point in the same direction as your foot and shouldn’t move further forward than your toes."
+                android:text="3-Exhale and push the dumbbells upward until your arms are fully extended overhead, but not locked out at the elbows."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"
@@ -116,7 +106,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4-Return to the start position. Repeat with the other leg."
+                android:text="4-Inhale and slowly lower the dumbbells back to shoulder level."
                 android:textSize="18dp"
                 android:textColor="@color/black"
                 android:layout_marginLeft="4dp"

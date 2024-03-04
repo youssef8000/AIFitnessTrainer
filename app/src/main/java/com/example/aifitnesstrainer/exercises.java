@@ -5,15 +5,14 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import com.example.aifitnesstrainer.exersices.Lateral_raise.lateral_raise;
 import com.example.aifitnesstrainer.exersices.Lunge.lunge_exercise;
 import com.example.aifitnesstrainer.exersices.ShoulderPress.shoulderPress_exercise;
+import com.example.aifitnesstrainer.exersices.squat.squat_exercise;
 
 
 public class exercises extends Fragment {

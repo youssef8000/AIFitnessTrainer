@@ -1,12 +1,12 @@
-package com.example.aifitnesstrainer;
+package com.example.aifitnesstrainer.exersices.squat;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +15,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class squat_goal extends Fragment {
+import com.example.aifitnesstrainer.DatabaseHelper;
+import com.example.aifitnesstrainer.R;
+
+public class squatGoal extends Fragment {
+
+    public squatGoal() {
+        // Required empty public constructor
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_squat_goal, container, false);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_squat_goal, container, false);
         DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
         TextView name=view.findViewById(R.id.squat_name);
         EditText goal=view.findViewById(R.id.set_goal_squat);
@@ -36,7 +45,7 @@ public class squat_goal extends Fragment {
                     boolean inserted = databaseHelper.insertusergoal(userEmail,exname , Integer.parseInt(userGoal));
                     if (inserted) {
                         Toast.makeText(requireContext(), "Start Training", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(requireContext(), view_camera.class);
+                        Intent intent = new Intent(requireContext(), squat_view_camera.class);
                         startActivity(intent);
                     } else {
                         Toast.makeText(requireContext(), "Failed to set your goal", Toast.LENGTH_SHORT).show();

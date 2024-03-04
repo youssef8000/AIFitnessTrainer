@@ -1,4 +1,4 @@
-package com.example.aifitnesstrainer;
+package com.example.aifitnesstrainer.exersices.squat;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +36,14 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.aifitnesstrainer.DatabaseHelper;
+import com.example.aifitnesstrainer.Display;
+import com.example.aifitnesstrainer.Feedback;
+import com.example.aifitnesstrainer.JavaMailAPI;
+import com.example.aifitnesstrainer.R;
+import com.example.aifitnesstrainer.User;
+import com.example.aifitnesstrainer.user_goal;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -52,7 +60,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class view_camera extends AppCompatActivity {
+public class squat_view_camera extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     Button finish_squat;
     int PERMISSION_REQUESTS = 1;
@@ -89,7 +97,7 @@ public class view_camera extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_camera);
+        setContentView(R.layout.activity_squat_view_camera);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         previewView = findViewById(R.id.preview);
         display = findViewById(R.id.display);
@@ -195,7 +203,7 @@ public class view_camera extends AppCompatActivity {
                     for (PoseLandmark poseLandmark : poseArrayList.get(0).getAllPoseLandmarks()) {
 
                         if (poseLandmark.getLandmarkType() == PoseLandmark.NOSE ||
-                               poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_SHOULDER ||
+                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_SHOULDER ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_ELBOW ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_WRIST ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_HIP ||
@@ -307,11 +315,11 @@ public class view_camera extends AppCompatActivity {
                                 SendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
                                 boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
                                 if (inserted) {
-                                    Toast.makeText(view_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(squat_view_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(getApplicationContext(), Feedback.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(squat_view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -397,8 +405,8 @@ public class view_camera extends AppCompatActivity {
         return knee;
     }
     private void DetectMovement(int roundedKneeFlexionAngle, int roundedHipFlexionAngle, int roundedAnkleDorsiflexionAngle,
-                                     PoseLandmark hipr, PoseLandmark kneer, PoseLandmark shoulderr, PoseLandmark ankler,
-                                     EditText ErrorKneeMessage, EditText ErrorHipMessage, EditText ErrorAnkleMessage) {
+                                PoseLandmark hipr, PoseLandmark kneer, PoseLandmark shoulderr, PoseLandmark ankler,
+                                EditText ErrorKneeMessage, EditText ErrorHipMessage, EditText ErrorAnkleMessage) {
         // Update Knee Message
         if (roundedKneeFlexionAngle > 95) {
             ErrorKneeMessage.setText("Squat To Deep");
