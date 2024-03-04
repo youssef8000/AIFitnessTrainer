@@ -1,6 +1,5 @@
 package com.example.aifitnesstrainer.exersices.ShoulderPress;
 
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
@@ -37,7 +36,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.example.aifitnesstrainer.DatabaseHelper;
 import com.example.aifitnesstrainer.Display;
 import com.example.aifitnesstrainer.Feedback;
@@ -59,9 +57,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-import java.util.Properties;
 import com.example.aifitnesstrainer.R;
-
 import org.opencv.core.Point;
 
 public class ShoulderPress_camera extends AppCompatActivity {
@@ -87,22 +83,12 @@ public class ShoulderPress_camera extends AppCompatActivity {
     ArrayList<Bitmap> bitmap4DisplayArrayList = new ArrayList<>();
     ArrayList<Pose> poseArrayList = new ArrayList<>();
     boolean isRunning = false;
-    //List<Integer> kneeAngles = new ArrayList<>();
-    // List<Integer> hipAngles = new ArrayList<>();
-    // List<Integer> ankleAngles = new ArrayList<>();
-
-    //////from here
     List<Integer> rightShoulderAngles = new ArrayList<>();
     List<Integer> leftShoulderAngles = new ArrayList<>();
     List<Integer> rightElbowAngles = new ArrayList<>();
     List<Integer> leftElbowAngles = new ArrayList<>();
-    List<Integer> rightWristAngles = new ArrayList<>();
-    List<Integer> leftWristAngles = new ArrayList<>();
-
-    List<Integer> leftHipAngles = new ArrayList<>();
-    List<Integer> rightHipAngles = new ArrayList<>();
-
-    List<Integer> seqState = new ArrayList<>();
+    List<Integer> seqStateLeft = new ArrayList<>();
+    List<Integer> seqStateRight = new ArrayList<>();
     List<String> userFeedback = new ArrayList<>();
     TextToSpeech speak;
     boolean feedbackSpoken = false;
@@ -276,10 +262,10 @@ public class ShoulderPress_camera extends AppCompatActivity {
                     PoseLandmark hipr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_HIP);
 
                     EditText errormessage = findViewById(R.id.errorEditText);
-                    EditText ErrorShoulderMessage = findViewById(R.id.shoulderError);
-                    EditText ErrorHipMessage = findViewById(R.id.hipError);
-                    EditText ErrorElbowMessage = findViewById(R.id.elbowError);
-                    EditText ErrorWristMessage = findViewById(R.id.wristError);
+                    EditText ErrorelbowLMessage = findViewById(R.id.shoulderError);
+                    EditText ErrorelbowRMessage = findViewById(R.id.hipError);
+                    EditText ErrorShoulderLMessage = findViewById(R.id.elbowError);
+                    EditText ErrorShoulderRMessage = findViewById(R.id.wristError);
 
                     if (shoulder != null && elbow != null && wrist != null
                             && shoulderr != null && elbowr != null && wristr != null && hip != null && hipr != null) {
@@ -291,6 +277,9 @@ public class ShoulderPress_camera extends AppCompatActivity {
                         drawLineBetweenLandmarks(wristr, elbowr);
                         drawLineBetweenLandmarks(elbowr, shoulderr);
                         drawLineBetweenLandmarks(shoulderr, hipr);
+
+                        drawLineBetweenLandmarks(shoulderr, shoulder);
+                        drawLineBetweenLandmarks(hip, hipr);
 
                         Point leftHipCoord = new Point(hipr.getPosition().x, hipr.getPosition().y);
                         Point leftWristCoord = new Point(wristr.getPosition().x, wristr.getPosition().y);
@@ -313,20 +302,16 @@ public class ShoulderPress_camera extends AppCompatActivity {
                         int elbow_angleL = (int) Math.round(leftshldrwristelbowangle);
 
                         leftShoulderAngles.add(shoulderl);
-                        leftWristAngles.add(elbow_angleL);
-
-                        //right side
+                        leftElbowAngles.add(elbow_angleL);
                         rightShoulderAngles.add(shoulderR);
                         rightElbowAngles.add(elbow_angleR);
-//                        rightWristAngles.add(roundedWristRightFlexionAngle);
-//                        rightHipAngles.add(roundedHipFlexionAngle);
 
                         // For the left side
                         Collections.sort(rightElbowAngles, Collections.reverseOrder());
                         int greatestelbow_RAngle = !rightElbowAngles.isEmpty() ? rightElbowAngles.get(0) : 0;
 
-                        Collections.sort(leftWristAngles, Collections.reverseOrder());
-                        int greatestelbow_LAngle = !leftWristAngles.isEmpty() ? leftWristAngles.get(0) : 0;
+                        Collections.sort(leftElbowAngles, Collections.reverseOrder());
+                        int greatestelbow_LAngle = !leftElbowAngles.isEmpty() ? leftElbowAngles.get(0) : 0;
 
                         Collections.sort(rightShoulderAngles, Collections.reverseOrder());
                         int greatesthip_shoulder_RAngle = !rightShoulderAngles.isEmpty() ? rightShoulderAngles.get(0) : 0;
@@ -334,60 +319,58 @@ public class ShoulderPress_camera extends AppCompatActivity {
                         Collections.sort(leftShoulderAngles, Collections.reverseOrder());
                         int greatesthip_shoulder_LAngle = !leftShoulderAngles.isEmpty() ? leftShoulderAngles.get(0) : 0;
 
-                        // For the right side
-                        Collections.sort(rightShoulderAngles, Collections.reverseOrder());
-                        int greatestShoulderAngleRight = !rightShoulderAngles.isEmpty() ? rightShoulderAngles.get(0) : 0;
-                        Collections.sort(rightElbowAngles, Collections.reverseOrder());
-                        int greatestElbowAngleRight = !rightElbowAngles.isEmpty() ? rightElbowAngles.get(0) : 0;
-                        Collections.sort(rightWristAngles, Collections.reverseOrder());
-                        int greatestWristAngleRight = !rightWristAngles.isEmpty() ? rightWristAngles.get(0) : 0;
-                        Collections.sort(rightHipAngles, Collections.reverseOrder());
-                        int greatestHipAngelRight = !leftHipAngles.isEmpty() ? leftHipAngles.get(0) : 0;
-
-                        int currentStateLeft = getState(shoulderl);
-                        // For the left side
-                        if (!seqState.contains(currentStateLeft) ) {
-                            seqState.add(currentStateLeft);
+                        int currentStateLeft = getStateLeft(elbow_angleL,shoulderl);
+                        int currentStateRight = getStateRight(elbow_angleR,shoulderR);
+                        if (!seqStateLeft.contains(currentStateLeft) ) {
+                            seqStateLeft.add(currentStateLeft);
                         }
+                        Collections.sort(seqStateLeft, Collections.reverseOrder());
 
-                        // For the right side
-                        //if (!seqState.contains(currentStateRight)) {
-                        //   seqState.add(currentStateRight);
-                        //}
+                        if (!seqStateRight.contains(currentStateLeft) ) {
+                            seqStateRight.add(currentStateRight);
+                        }
+                        Collections.sort(seqStateRight, Collections.reverseOrder());
 
-                        Collections.sort(seqState, Collections.reverseOrder());
                         // For the left side
-                        if ((seqState.get(0) == 3 && currentStateLeft == 1 && !complete_exercise) ||
-                                (seqState.get(0) == 2 && currentStateLeft == 1 && !complete_exercise)) {
+                        if ((seqStateLeft.get(0) == 3 && currentStateLeft == 1 && !complete_exercise
+                                &&seqStateRight.get(0)==3 && currentStateLeft==1) ||
+                                (seqStateLeft.get(0) == 2 && currentStateLeft == 1 && !complete_exercise
+                                        &seqStateRight.get(0)==2 && currentStateLeft==1 )) {
+
                             int previous_score = current_score;
                             current_score++;
-                            int new_score = current_score;
 
-                            //handle errors and angles between elbows
-                            if (greatestelbow_LAngle < 170 || greatestelbow_LAngle < 85) {
-                                // If the elbow angle is not within an acceptable range
+                            if ((greatestelbow_LAngle < 155 && shoulderl>130) || (greatestelbow_LAngle < 85 && shoulderl>130)) {
                                 incorrect_score++;
                                 userFeedback.add("Keep your elbows close to your body and don't lock them out at the top.");
-                                speak.speak("This is an incorrect move because your elbow position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
-                            } else if (greatesthip_shoulder_LAngle > 170 || greatesthip_shoulder_LAngle < 100) {
-                                // If the shoulder angle is not within an acceptable range
+                                speak.speak("This is an incorrect move because your left elbow position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
+                            } else if (greatesthip_shoulder_LAngle < 165 || greatesthip_shoulder_LAngle < 140) {
                                 incorrect_score++;
                                 userFeedback.add("Keep your shoulders stable and avoid excessive arching or shrugging.");
-                                speak.speak("This is an incorrect move because your shoulder position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
+                                speak.speak("This is an incorrect move because your left shoulder position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
+                            }else if ((greatestelbow_RAngle < 155 && shoulderR>130) || (greatestelbow_RAngle < 85 && shoulderR>130)) {
+                                incorrect_score++;
+                                userFeedback.add("Keep your elbows close to your body and don't lock them out at the top.");
+                                speak.speak("This is an incorrect move because your right elbow position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
+                            }else if (greatesthip_shoulder_RAngle < 165 || greatesthip_shoulder_RAngle < 140) {
+                                incorrect_score++;
+                                userFeedback.add("Keep your shoulders stable and avoid excessive arching or shrugging.");
+                                speak.speak("This is an incorrect move because your right shoulder position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
                             } else {
-                                // If the angles and posture are within acceptable ranges
                                 correct_score++;
                                 speak.speak("This is a correct move.", TextToSpeech.QUEUE_FLUSH, null);
                             }
-
+                            int new_score = current_score;
 
                             if (new_score >previous_score) {
-                                // Clear all lists
                                 leftShoulderAngles.clear();
-                                leftHipAngles.clear();
+                                rightShoulderAngles.clear();
+                                rightElbowAngles.clear();
                                 leftElbowAngles.clear();
-                                seqState.clear();
-                                seqState.add(0); // Add the initial state or any appropriate value
+                                seqStateLeft.clear();
+                                seqStateLeft.add(0);
+                                seqStateRight.clear();
+                                seqStateRight.add(0);
                             }
                         }
 
@@ -425,39 +408,66 @@ public class ShoulderPress_camera extends AppCompatActivity {
 
                         errormessage.setText("");
 
-                        // Update shoulder Message
-                        if (greatestelbow_LAngle < 170 ) {
-                            // If the shoulder angle indicates excessive shoulder flexion
-                            ErrorShoulderMessage.setText("");
-                            drawErrorLineBetweenLandmarks(hip, shoulder);
-                            ErrorShoulderMessage.setText("Avoid excessive shoulder flexion");
-                        } else if (greatesthip_shoulder_LAngle < 100 && greatesthip_shoulder_LAngle > 80) {
-                            // If the shoulder angle indicates insufficient shoulder flexion
-                            ErrorShoulderMessage.setText("");
-                            drawErrorLineBetweenLandmarks(hip, shoulder);
-                            ErrorShoulderMessage.setText("Increase shoulder flexion");
+                        // Update ElbowLeft Message
+                        if (elbow_angleL < 155 && elbow_angleL > 140 ) {
+                            ErrorelbowLMessage.setText("");
+                            drawErrorLineBetweenLandmarks(wrist, elbow);
+                            ErrorelbowLMessage.setText("Avoid excessive Elbow flexion");
+                        } else if (elbow_angleL < 80 ) {
+                            ErrorelbowLMessage.setText("");
+                            drawErrorLineBetweenLandmarks(wrist, elbow);
+                            ErrorelbowLMessage.setText("Increase Elbow flexion");
                         } else {
-                            // If the shoulder angle is within acceptable range
-                            drawLineBetweenLandmarks(hip, shoulder);
-                            ErrorShoulderMessage.setText("");
+                            // If the Elbow angle is within acceptable range
+                            drawLineBetweenLandmarks(wrist, elbow);
+                            ErrorelbowLMessage.setText("");
                         }
 
-//
-//                        if (roundedHipFlexionAngle > 45) {
-//                            // If the hip angle indicates bending backward
-//                            ErrorHipMessage.setText("");
-//                            drawErrorLineBetweenLandmarks(shoulder, hip);
-//                            ErrorHipMessage.setText("Avoid leaning backward");
-//                        } else if (roundedHipFlexionAngle < 20 && roundedHipFlexionAngle > 10) {
-//                            // If the hip angle indicates excessive forward bending
-//                            ErrorHipMessage.setText("");
-//                            drawErrorLineBetweenLandmarks(shoulder, hip);
-//                            ErrorHipMessage.setText("Avoid leaning forward");
-//                        } else {
-//                            // If the hip angle is within acceptable range
-//                            drawLineBetweenLandmarks(shoulder, hip);
-//                            ErrorHipMessage.setText("");
-//                        }
+                        // Update ElbowRight Message
+                        if (elbow_angleR < 155 && elbow_angleR > 140) {
+                            ErrorelbowRMessage.setText("");
+                            drawErrorLineBetweenLandmarks(wristr, elbowr);
+                            ErrorelbowRMessage.setText("Avoid excessive Elbow flexion");
+                        } else if ( elbow_angleR < 80 ) {
+                            // If the Elbow angle indicates insufficient shoulder flexion
+                            ErrorelbowRMessage.setText("");
+                            drawErrorLineBetweenLandmarks(wristr, elbowr);
+                            ErrorelbowRMessage.setText("Increase Elbow flexion");
+                        } else {
+                            drawLineBetweenLandmarks(wristr, elbowr);
+                            ErrorelbowRMessage.setText("");
+                        }
+
+                        // Update ShoulderLeft Message
+                        if (shoulderl < 160 && shoulderl > 150) {
+                            // If the shoulder angle indicates excessive shoulder flexion
+                            ErrorShoulderLMessage.setText("");
+                            drawErrorLineBetweenLandmarks(elbow, shoulder);
+                            ErrorShoulderLMessage.setText("Avoid excessive shoulder flexion");
+                        } else if ( shoulderl < 135 && shoulderl > 50 ) {
+                            // If the Elbow angle indicates insufficient shoulder flexion
+                            ErrorShoulderLMessage.setText("");
+                            drawErrorLineBetweenLandmarks(elbow, shoulder);
+                            ErrorShoulderLMessage.setText("Increase shoulder flexion");
+                        } else {
+                            drawLineBetweenLandmarks(elbow, shoulder);
+                            ErrorShoulderLMessage.setText("");
+                        }
+
+                        // Update ShoulderRight Message
+                        if (shoulderR < 160 && shoulderR > 150 ) {
+                            ErrorShoulderRMessage.setText("");
+                            drawErrorLineBetweenLandmarks(elbowr, shoulderr);
+                            ErrorShoulderRMessage.setText("Avoid excessive shoulder flexion");
+                        } else if ( shoulderR < 135 && shoulderR > 50 ) {
+                            ErrorShoulderRMessage.setText("");
+                            drawErrorLineBetweenLandmarks(elbowr, shoulderr);
+                            ErrorShoulderRMessage.setText("Increase shoulder flexion");
+                        } else {
+                            drawLineBetweenLandmarks(elbowr, shoulderr);
+                            ErrorShoulderRMessage.setText("");
+                        }
+
 
                         EditText ErrorLeftShoulder = findViewById(R.id.leftShoulder);
                         ErrorLeftShoulder.setText("Left Shoulder:"+shoulderl + "  "+greatesthip_shoulder_LAngle);
@@ -470,6 +480,7 @@ public class ShoulderPress_camera extends AppCompatActivity {
 
                         EditText ErrorRightElbow = findViewById(R.id.rightelbow);
                         ErrorRightElbow.setText("Right Elbow:"+elbow_angleR+ "  "+greatestelbow_RAngle);
+
                     } else {
                         errormessage.setText("Some landmarks are missing for squat detection");
                     }
@@ -509,16 +520,27 @@ public class ShoulderPress_camera extends AppCompatActivity {
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, email, subject, message);
         javaMailAPI.execute();
     }
-    private int getState(int shoulderAngle) {
-        int state = 0;
-        if (90 <= shoulderAngle && shoulderAngle <= 120) {
-            state = 1;
-        } else if (125 <= shoulderAngle && shoulderAngle <= 155) {
-            state = 2;
-        } else if (160 <= shoulderAngle && shoulderAngle <= 180) {
-            state = 3;
+    private int getStateRight(int elbow_angleR , int shoulder_angleR) {
+        int elbowRight = 0;
+        if ( elbow_angleR >=80 && elbow_angleR <120 && shoulder_angleR>130) {
+            elbowRight = 1;
+        } else if (elbow_angleR >=120 && elbow_angleR <150 && shoulder_angleR>130) {
+            elbowRight = 2;
+        } else if ( elbow_angleR >=150 && elbow_angleR <180 && shoulder_angleR>130) {
+            elbowRight = 3;
         }
-        return state;
+        return elbowRight;
+    }
+    private int getStateLeft(int elbow_angleL , int shoulder_angleL) {
+        int elbowLeft = 0;
+        if ( elbow_angleL>=80 && elbow_angleL<120 && shoulder_angleL>130) {
+            elbowLeft = 1;
+        } else if ( elbow_angleL>=120 && elbow_angleL<150 && shoulder_angleL>130) {
+            elbowLeft = 2;
+        } else if ( elbow_angleL>=150 && elbow_angleL<180 && shoulder_angleL>130) {
+            elbowLeft = 3;
+        }
+        return elbowLeft;
     }
     public static double findAngle(Point p1, Point p2, Point refPt) {
         double p1RefX = p1.x - refPt.x;

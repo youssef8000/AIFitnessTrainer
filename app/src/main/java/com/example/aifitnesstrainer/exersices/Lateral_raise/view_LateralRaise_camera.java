@@ -272,6 +272,8 @@ public class view_LateralRaise_camera extends AppCompatActivity {
                         drawLineBetweenLandmarks(elbowr13, wristr15);
                         drawLineBetweenLandmarks(shoulderr12, hipr24);
                         drawLineBetweenLandmarks(shoulderr11, hipr23);
+                        drawLineBetweenLandmarks(shoulderr11, shoulderr12);
+                        drawLineBetweenLandmarks(hipr24, hipr23);
 
                         Point leftHipCoord = new Point(hipr23.getPosition().x, hipr23.getPosition().y);
                         Point leftWristCoord = new Point(wristr15.getPosition().x, wristr15.getPosition().y);
@@ -347,9 +349,19 @@ public class view_LateralRaise_camera extends AppCompatActivity {
                                 userFeedback.add("Lower your Left shoulder to correct the shoulder angle.");
                                 speak.speak("This is an incorrect move because your Left shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
 
+                            }else if (greatesthip_shoulder_LAngle<100 ) {
+                                incorrect_score++;
+                                userFeedback.add("Raise your Left shoulder to correct the shoulder angle.");
+                                speak.speak("This is an incorrect move because your Left shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+
                             } else if (greatesthip_shoulder_RAngle>120 ) {
                                 incorrect_score++;
                                 userFeedback.add("Lower your Right shoulder to correct the shoulder angle.");
+                                speak.speak("This is an incorrect move because your Right shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+                            }
+                            else if (greatesthip_shoulder_RAngle<100 ) {
+                                incorrect_score++;
+                                userFeedback.add("Raise your Right shoulder to correct the shoulder angle.");
                                 speak.speak("This is an incorrect move because your Right shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
                             }
                             else{
@@ -438,7 +450,7 @@ public class view_LateralRaise_camera extends AppCompatActivity {
                         }
 
                         if (elbow_angleL < 160) {
-                            ErrorAnkleMessage.setText("make your  left hand in a straight line");
+                            ErrorAnkleMessage.setText("make your left hand in a straight line");
                             drawErrorLineBetweenLandmarks(elbowr13, wristr15);
                         }else {
                             drawLineBetweenLandmarks(elbowr13, wristr15);;
