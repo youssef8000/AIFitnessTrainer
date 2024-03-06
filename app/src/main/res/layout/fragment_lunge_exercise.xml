@@ -18,7 +18,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Shoulder Press"
+                android:text="Lunge"
                 android:textStyle="bold"
                 android:textSize="30dp"
                 android:textColor="@color/black"

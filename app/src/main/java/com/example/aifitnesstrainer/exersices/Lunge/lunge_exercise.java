@@ -32,7 +32,7 @@ public class lunge_exercise extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_lunge_exercise, container, false);
         WebView gifWebView = view.findViewById(R.id.giflungeView);
-        gifWebView.loadUrl("file:///android_res/drawable/lunge_video.gif");
+        gifWebView.loadUrl("file:///android_res/drawable/lunge_ezgif.gif");
         Button lunge_exercise=view.findViewById(R.id.lunge_camera);
         lunge_exercise.setOnClickListener(new View.OnClickListener() {
             @Override

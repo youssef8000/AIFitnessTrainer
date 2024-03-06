@@ -53,6 +53,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
+                    <!-- Text view -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="10dp"
+                        android:text="Bicep Curl"
+                        android:textColor="@color/black"/>
 
                     <!-- Image view -->
                     <ImageView
@@ -61,20 +71,12 @@
                         android:src="@drawable/bicep_curl"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
-
-                    <!-- Text view -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:text="Bicep Curl"
-                        android:textColor="@color/black"/>
-
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start exercise"
                         android:id="@+id/bicep_curl"
+                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
 
@@ -97,6 +99,15 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Push up"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
@@ -104,20 +115,13 @@
                         android:src="@drawable/push_up"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Push up"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
                     <!-- Button -->
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start exercise"
                         android:id="@+id/Push_up"
+                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -138,7 +142,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Shoulder press"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
@@ -146,20 +158,13 @@
                         android:src="@drawable/shoulder_press"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Shoulder press"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
                     <!-- Button -->
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start exercise"
                         android:id="@+id/Shoulder_press"
+                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -180,7 +185,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Squat"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
@@ -188,20 +201,13 @@
                         android:src="@drawable/squat"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Squat"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
                     <!-- Button -->
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start exercise"
                         android:id="@+id/Squat"
+                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -222,7 +228,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lateral raises"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
@@ -230,20 +244,13 @@
                         android:src="@drawable/lateral_raise"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Lateral raises"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
                     <!-- Button -->
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start exercise"
                         android:id="@+id/lateral_raises"
+                        android:layout_gravity="center"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -264,7 +271,15 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lunge"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"/>
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
@@ -272,19 +287,12 @@
                         android:src="@drawable/lunge_exercise"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Lunge"
-                        android:textSize="18sp"
-                        android:textColor="@color/black"/>
-
                     <!-- Button -->
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start exercise"
+                        android:layout_gravity="center"
                         android:id="@+id/lunge"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>

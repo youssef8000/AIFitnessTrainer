@@ -27,13 +27,12 @@ public class SignUp extends AppCompatActivity {
         signupName = findViewById(R.id.signup_name);
         signupEmail = findViewById(R.id.signup_email);
         signupPhone = findViewById(R.id.signup_phone);
-//        signupPassword = findViewById(R.id.signup_password);
-//        signupConfirm = findViewById(R.id.signup_confirm);
+        signupPassword = findViewById(R.id.signup_password);
+        signupConfirm = findViewById(R.id.signup_confirm);
         Calendar calendar1=Calendar.getInstance();
         DatePickerDialog.OnDateSetListener date=new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
                 calendar1.set(Calendar.YEAR,year);
                 calendar1.set(Calendar.MONTH,month);
                 calendar1.set(Calendar.DAY_OF_MONTH,dayOfMonth);
@@ -59,13 +58,17 @@ public class SignUp extends AppCompatActivity {
                 String name = signupName.getText().toString();
                 String email = signupEmail.getText().toString();
                 String phone =signupPhone.getText().toString();
+                String password = signupPassword.getText().toString();
+                String confirmPassword = signupConfirm.getText().toString();
                 String randomPassword = generateRandomPassword();
-                String hashedPassword = hashPassword(randomPassword);
+                String hashedPassword = hashPassword(password);
                 SendMail(email,name,phone,randomPassword);
                 String birthdate = birthday.getText().toString();
-                if (name.equals("") ||birthdate.equals("") ||email.equals("") || phone.equals(""))
+                if (name.equals("") ||birthdate.equals("") ||email.equals("") || phone.equals("")
+                        || password.equals("")|| confirmPassword.equals(""))
                     Toast.makeText(SignUp.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
                 else {
+                    if (password.equals(confirmPassword)) {
                     if (email.contains("@gmail.com")) {
                         Boolean checkUserEmail = databaseHelper.checkEmail(email);
                         if (!checkUserEmail) {
@@ -80,9 +83,12 @@ public class SignUp extends AppCompatActivity {
                         } else {
                             Toast.makeText(SignUp.this, "User already exists! Please login", Toast.LENGTH_SHORT).show();
                         }
-                }
-                    else {
-                        Toast.makeText(SignUp.this, "Please enter a valid Gmail address", Toast.LENGTH_SHORT).show();
+                    }
+                        else {
+                            Toast.makeText(SignUp.this, "Please enter a valid Gmail address", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                            Toast.makeText(SignUp.this, "Confirmation password doesn't match password", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

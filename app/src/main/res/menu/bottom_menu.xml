@@ -10,4 +10,8 @@
         android:icon="@drawable/ic_category"
         />
 
+    <item
+        android:id="@+id/profile"
+        android:title="profile"
+        android:icon="@drawable/ic_camera"/>
 </menu>

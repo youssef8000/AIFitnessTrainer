@@ -17,7 +17,6 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class Feedback extends AppCompatActivity {
     private ImageButton logoutbtn;
-    private ImageButton feedback;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
     private BottomNavigationView bottomNavigationView;
@@ -27,7 +26,6 @@ public class Feedback extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
         logoutbtn = findViewById(R.id.btn_logout);
-        feedback = findViewById(R.id.btn_camera);
         toolbar = findViewById(R.id.toolbar_nav);
         bottomNavigationView = findViewById(R.id.bottom_nav);
         setSupportActionBar(toolbar);
@@ -43,12 +41,7 @@ public class Feedback extends AppCompatActivity {
                 finish();
             }
         });
-        feedback.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUserFeedbackFragment();
-            }
-        });
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -58,6 +51,9 @@ public class Feedback extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.category) {
                     openFragment(new exercises());
+                    return true;
+                } else if (itemId == R.id.profile) {
+                    openUserFeedbackFragment();
                     return true;
                 }
                 return false;

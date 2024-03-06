@@ -1,5 +1,6 @@
 package com.example.aifitnesstrainer;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -12,7 +13,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context) {
-        super(context, "appDB.db", null, 1);
+        super(context, "aiDB.db", null, 1);
     }
 
     @Override
@@ -154,7 +155,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
     public Cursor getAllFeedbackByEmail(String email) {
         SQLiteDatabase MyDatabase = this.getReadableDatabase();
-        String[] columns = {"ex_name", "goal", "correct_score", "incorrect_score", "accuracy", "workoutfeedback"};
+        String[] columns = {"id","ex_name", "goal", "correct_score", "incorrect_score", "accuracy", "workoutfeedback"};
         String selection = "email=?";
         String[] selectionArgs = {email};
 
@@ -162,6 +163,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor cursor = MyDatabase.query("feedback", columns, selection, selectionArgs, null, null, null);
 
         return cursor;
+    }
+    public user_feedback getFeedbackById(int feedbackId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        user_feedback feedback = null;
+
+        Cursor cursor = db.rawQuery("SELECT * FROM feedback WHERE id = ?", new String[]{String.valueOf(feedbackId)});
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                int idColumnIndex = cursor.getColumnIndex("id");
+                int emailColumnIndex = cursor.getColumnIndex("email");
+                int exNameColumnIndex = cursor.getColumnIndex("ex_name");
+                int goalColumnIndex = cursor.getColumnIndex("goal");
+                int correctScoreColumnIndex = cursor.getColumnIndex("correct_score");
+                int incorrectScoreColumnIndex = cursor.getColumnIndex("incorrect_score");
+                int accuracyColumnIndex = cursor.getColumnIndex("accuracy");
+                int workoutFeedbackColumnIndex = cursor.getColumnIndex("workoutfeedback");
+
+                int fetchedId = cursor.getInt(idColumnIndex);
+                String email = cursor.getString(emailColumnIndex);
+                String exName = cursor.getString(exNameColumnIndex);
+                int goal = cursor.getInt(goalColumnIndex);
+                int correctScore = cursor.getInt(correctScoreColumnIndex);
+                int incorrectScore = cursor.getInt(incorrectScoreColumnIndex);
+                double accuracy = cursor.getDouble(accuracyColumnIndex);
+                String workoutFeedback = cursor.getString(workoutFeedbackColumnIndex);
+
+                feedback = new user_feedback(fetchedId, email, exName, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return feedback;
     }
     public Boolean updatePassword(String email, String password){
         SQLiteDatabase MyDatabase = this.getWritableDatabase();

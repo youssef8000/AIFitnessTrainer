@@ -32,7 +32,7 @@ public class lateral_raise extends Fragment {
                              Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_lateral_raise, container, false);
         WebView gifWebView = view.findViewById(R.id.gifWebView);
-        gifWebView.loadUrl("file:///android_res/drawable/lateral_raise_video.gif");
+        gifWebView.loadUrl("file:///android_res/drawable/raise_ezgif.gif");
         Button lateral_raises=view.findViewById(R.id.lateral_raises_camera);
         lateral_raises.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -145,7 +145,7 @@ public class squat_view_camera extends AppCompatActivity {
                 cameraProviderFuture.addListener(() -> {
                     try {
                         ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                        poseDetection(cameraProvider);
+                        ImageAnalysis(cameraProvider);
                     } catch (ExecutionException | InterruptedException e) {
                         // No errors need to be handled for this Future.
                     }
@@ -155,8 +155,7 @@ public class squat_view_camera extends AppCompatActivity {
                 }            }
         }.start();
     }
-
-    Runnable KeyPointsDetection = new Runnable() {
+    Runnable poseDetection  = new Runnable() {
         @Override
         public void run() {
             poseDetector.process(InputImage.fromBitmap(bitmapArrayList.get(0),0)).addOnSuccessListener(new OnSuccessListener<Pose>() {
@@ -173,7 +172,7 @@ public class squat_view_camera extends AppCompatActivity {
         }
     };
     @ExperimentalGetImage
-    void poseDetection(@NonNull ProcessCameraProvider cameraProvider) {
+    void ImageAnalysis(@NonNull ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder()
                 .build();
         CameraSelector cameraSelector = new CameraSelector.Builder()
@@ -250,6 +249,8 @@ public class squat_view_camera extends AppCompatActivity {
                     PoseLandmark kneer = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_KNEE);
                     PoseLandmark ankler = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_ANKLE);
                     PoseLandmark footr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_FOOT_INDEX);
+
+
                     EditText errormessage = findViewById(R.id.errorEditText);
                     EditText ErrorKneeMessage = findViewById(R.id.kneeError);
                     EditText ErrorHipMessage = findViewById(R.id.hipError);
@@ -264,18 +265,35 @@ public class squat_view_camera extends AppCompatActivity {
                         drawLineBetweenLandmarks(kneer, ankler);
                         drawLineBetweenLandmarks(ankler,footr);
 
+
                         double[] hipCoord = { hipr.getPosition().x, hipr.getPosition().y };
                         double[] shoulderCoord = { shoulderr.getPosition().x,  shoulderr.getPosition().y };
                         double[] kneeCoord = { kneer.getPosition().x, kneer.getPosition().y };
                         double[] ankleCoord = { ankler.getPosition().x, ankler.getPosition().y };
 
+                        double[] noseCoord = { poseArrayList.get(0).getPoseLandmark(PoseLandmark.NOSE).getPosition().x,
+                                poseArrayList.get(0).getPoseLandmark(PoseLandmark.NOSE).getPosition().y };
+                        double[] shoulderLCoord = { poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_SHOULDER).getPosition().x,
+                                poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_SHOULDER).getPosition().y };
+
                         double kneeAngleDegrees = CalculateAngle(hipCoord, new double[]{ kneeCoord[0], 0 }, kneeCoord);
                         double hipAngleDegrees = CalculateAngle(shoulderCoord, new double[]{ hipCoord[0], 0 }, hipCoord);
                         double ankleAngleDegrees = CalculateAngle(kneeCoord, new double[]{ ankleCoord[0], 0 }, ankleCoord);
+                        double nose_angle=CalculateAngle(shoulderLCoord,shoulderCoord,noseCoord);
 
                         int roundedKneeFlexionAngle = (int) Math.round(kneeAngleDegrees);
                         int roundedHipFlexionAngle = (int) Math.round(hipAngleDegrees);
                         int roundedAnkleDorsiflexionAngle = (int) Math.round(ankleAngleDegrees);
+
+                        int nosey = (int) Math.round(nose_angle);
+
+                        EditText nosemessage=findViewById(R.id.errornose);
+                        if (nosey>35)
+                        {
+                            nosemessage.setText("The camera is not aligned correctly, please stand to the right side of the camera.");
+                        }else {
+                            nosemessage.setText("");
+                        }
 
                         kneeAngles.add(roundedKneeFlexionAngle);
                         hipAngles.add(roundedHipFlexionAngle);
@@ -324,31 +342,6 @@ public class squat_view_camera extends AppCompatActivity {
 
                             }
                         });
-                        // Define the starting and ending points for the vertical line
-                        float hipStartX = (float) hipCoord[0];
-                        float hipStartY = (float) hipCoord[1] - 50;
-                        float hipEndY = (float) hipCoord[1] + 20;
-                        float kneeStartX = (float) kneeCoord[0];
-                        float kneeStartY = (float) kneeCoord[1] - 50;
-                        float kneeEndY = (float) kneeCoord[1] + 20;
-                        float ankleStartX = (float) ankleCoord[0];
-                        float ankleStartY = (float) ankleCoord[1] - 50;
-                        float ankleEndY = (float) ankleCoord[1] + 20;
-
-                        // Create a Paint object for drawing the line
-                        Paint linePaint = new Paint();
-                        linePaint.setColor(Color.BLACK);
-                        linePaint.setStrokeWidth(3);
-
-                        // Draw the vertical line on the bitmap
-                        canvas.drawLine(kneeStartX, kneeStartY, kneeStartX, kneeEndY, linePaint);
-                        canvas.drawLine(hipStartX, hipStartY, hipStartX, hipEndY, linePaint);
-                        canvas.drawLine(ankleStartX, ankleStartY, ankleStartX, ankleEndY, linePaint);
-
-                        // Draw the dotted line at the ankle coordinate
-                        drawDottedLine(bitmap, hipCoord, hipCoord[1] - 50, hipCoord[1] + 20, Color.BLACK);
-                        drawDottedLine(bitmap, kneeCoord, kneeCoord[1] - 50, kneeCoord[1] + 20, Color.BLACK);
-                        drawDottedLine(bitmap, ankleCoord, ankleCoord[1] - 50, ankleCoord[1] + 20, Color.WHITE); // Adjust color as needed
 
                         errormessage.setText("");
                         DetectMovement(roundedKneeFlexionAngle, roundedHipFlexionAngle, roundedAnkleDorsiflexionAngle,
@@ -368,7 +361,7 @@ public class squat_view_camera extends AppCompatActivity {
                     isRunning = false;
                 }
                 if (poseArrayList.size() == 0 && bitmapArrayList.size() >= 1 && !isRunning) {
-                    KeyPointsDetection.run();
+                    poseDetection .run();
                     isRunning = true;
                 }
                 if (bitmap4DisplayArrayList.size() >= 1) {
@@ -452,15 +445,15 @@ public class squat_view_camera extends AppCompatActivity {
             } else if (greatestKneeAngle > 50 && greatestKneeAngle < 80) {
                 incorrect_score++;
                 userFeedback.add("Lower your hip to correct the knee angle.");
-                speak.speak("This is an incorrect move because Lower your hip to correct the knee angle", TextToSpeech.QUEUE_FLUSH, null);
+                speak.speak("This is an incorrect movement because your hip is higher than your knee", TextToSpeech.QUEUE_FLUSH, null);
             } else if (greatestHipAngle > 45) {
-                incorrect_score++;
-                userFeedback.add("You are bending backward.");
-                speak.speak("This is an incorrect move because You are bending backward", TextToSpeech.QUEUE_FLUSH, null);
-            } else if (greatestHipAngle < 20 && greatestHipAngle > 10) {
                 incorrect_score++;
                 userFeedback.add("You are bending forward.");
                 speak.speak("This is an incorrect move because You are bending forward", TextToSpeech.QUEUE_FLUSH, null);
+            } else if (greatestHipAngle < 20 && greatestHipAngle > 10) {
+                incorrect_score++;
+                userFeedback.add("You are bending backward.");
+                speak.speak("This is an incorrect move because You are bending backward", TextToSpeech.QUEUE_FLUSH, null);
             } else if (greatestAnkleAngle > 40) {
                 incorrect_score++;
                 userFeedback.add("Your knee is falling over your toe.");
@@ -478,16 +471,6 @@ public class squat_view_camera extends AppCompatActivity {
                 seqState.clear();
                 seqState.add(0); // Add the initial state or any appropriate value
             }
-        }
-    }
-    public static void drawDottedLine(Bitmap bitmap, double[] lmCoord, double start, double end, int color) {
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint();
-        paint.setColor(color);
-        paint.setStrokeWidth(2);
-        int pixStep = 0;
-        for (int i = (int) start; i <= end; i += 8) {
-            canvas.drawCircle((float) lmCoord[0], i + pixStep, 2, paint);
         }
     }
     public static double CalculateAngle(double[] p1, double[] p2, double[] refPt) {

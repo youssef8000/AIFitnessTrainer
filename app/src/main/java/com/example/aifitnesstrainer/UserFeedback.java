@@ -26,7 +26,13 @@ import java.util.List;
 public class UserFeedback extends Fragment {
     public UserFeedback() {
     }
-
+    private void openFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
     @SuppressLint("Range")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,7 +44,7 @@ public class UserFeedback extends Fragment {
         String userEmail = preferences.getString("user_email", "");
         TextView trainer_name = view.findViewById(R.id.trainer_name);
         User user = databaseHelper.getUserByEmail(userEmail);
-        trainer_name.setText(user.getname());
+        trainer_name.setText("Hello,"+user.getname());
         Cursor cursor = databaseHelper.getAllFeedbackByEmail(userEmail);
         TableLayout tableLayout = view.findViewById(R.id.table);
         if (cursor.moveToFirst()) {
@@ -61,27 +67,30 @@ public class UserFeedback extends Fragment {
                 textView3.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
                 textView3.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
-                TextView textView4 = new TextView(requireContext());
-                textView4.setText(cursor.getString(cursor.getColumnIndex("workoutfeedback")));
-                textView4.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
-                textView4.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
+                Button button = new Button(requireContext());
+                button.setText("See Feedback");
+                int feedbackId = cursor.getInt(cursor.getColumnIndex("id"));
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openFragment(new feedback_details(feedbackId));
+                    }
+                });
+                button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
                 row.addView(textView1);
                 row.addView(textView2);
                 row.addView(textView3);
-                row.addView(textView4);
+                row.addView(button);
 
                 tableLayout.addView(row);
-                // Add horizontal line after each row
                 View line = new View(requireContext());
                 line.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2));
                 line.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.black));
                 tableLayout.addView(line);
             } while (cursor.moveToNext());
         }
-
         cursor.close();
-
         return view;
     }
 }

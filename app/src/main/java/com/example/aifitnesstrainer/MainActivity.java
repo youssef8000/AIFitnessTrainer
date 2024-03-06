@@ -17,7 +17,6 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private ImageButton logoutbtn;
-    private ImageButton searchcamerabtn;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
     private BottomNavigationView bottomNavigationView;
@@ -27,9 +26,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         logoutbtn = findViewById(R.id.btn_logout);
-        searchcamerabtn = findViewById(R.id.btn_camera);
         toolbar = findViewById(R.id.toolbar_nav);
-        bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
         setSupportActionBar(toolbar);
         bottomNavigationView.setBackground(null);
         fragmentManager = getSupportFragmentManager();
@@ -43,12 +41,6 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
-        searchcamerabtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openUserFeedbackFragment();
-            }
-        });
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -59,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
                 } else if (itemId == R.id.category) {
                     openFragment(new exercises());
                     return true;
+                }
+                else if (itemId == R.id.profile) {
+                    openUserFeedbackFragment();
+                return true;
                 }
                 return false;
             }
@@ -73,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
     private void openUserFeedbackFragment() {
         // Create a new instance of the UserFeedback fragment
         UserFeedback userFeedbackFragment = new UserFeedback();
-
         // Begin a fragment transaction
         getSupportFragmentManager()
                 .beginTransaction()

@@ -32,7 +32,7 @@ public class squat_exercise extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_squat_exercise, container, false);
         WebView gifWebView = view.findViewById(R.id.gifWebView);
-        gifWebView.loadUrl("file:///android_res/drawable/squat_video.gif");
+        gifWebView.loadUrl("file:///android_res/drawable/squat_ezgif.gif");
         Button squat_exercise=view.findViewById(R.id.squat_camera);
         squat_exercise.setOnClickListener(new View.OnClickListener() {
             @Override

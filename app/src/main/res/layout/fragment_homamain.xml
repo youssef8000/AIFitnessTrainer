@@ -68,25 +68,28 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        android:text="Exercises"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/black"/>
                     <!-- Image view -->
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:src="@drawable/exercise"
+                        android:src="@drawable/workout"
                         android:scaleType="centerCrop"
                         android:contentDescription="Image description"/>
                     <!-- Text view -->
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:text="Exercises"
-                        android:textColor="@color/black"/>
+
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Show all exercise"
+                        android:text="Show all exercises"
+                        android:layout_gravity="center"
                         android:id="@+id/exercise"
                         android:layout_marginTop="8dp"/>
                 </LinearLayout>

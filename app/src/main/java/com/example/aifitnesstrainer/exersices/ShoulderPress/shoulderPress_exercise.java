@@ -35,7 +35,7 @@ public class shoulderPress_exercise extends Fragment {
         View view = inflater.inflate(R.layout.fragment_shoulder_press_exercise, container, false);
         // Inflate the layout for this fragment
         WebView gifWebView = view.findViewById(R.id.giflungeView);
-        gifWebView.loadUrl("file:///android_res/drawable/shoulder_press_video.gif");
+        gifWebView.loadUrl("file:///android_res/drawable/press_ezgif.gif");
         Button lunge_exercise=view.findViewById(R.id.lunge_camera);
         lunge_exercise.setOnClickListener(new View.OnClickListener() {
             @Override
