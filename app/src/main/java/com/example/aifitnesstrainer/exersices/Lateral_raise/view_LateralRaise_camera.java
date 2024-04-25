@@ -27,6 +27,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.view.View;
@@ -300,12 +301,6 @@ public class view_LateralRaise_camera extends AppCompatActivity {
                         hip_shoulder_RAngles.add(shoulderR);
                         hip_shoulder_LAngles.add(shoulderl);
 
-                        Collections.sort(elbow_RAngles, Collections.reverseOrder());
-                        int greatestelbow_RAngle = !elbow_RAngles.isEmpty() ? elbow_RAngles.get(0) : 0;
-
-                        Collections.sort(elbow_LAngles, Collections.reverseOrder());
-                        int greatestelbow_LAngle = !elbow_LAngles.isEmpty() ? elbow_LAngles.get(0) : 0;
-
                         Collections.sort(hip_shoulder_RAngles, Collections.reverseOrder());
                         int greatesthip_shoulder_RAngle = !hip_shoulder_RAngles.isEmpty() ? hip_shoulder_RAngles.get(0) : 0;
 
@@ -334,35 +329,34 @@ public class view_LateralRaise_camera extends AppCompatActivity {
                             current_score++;
                             int new_score=current_score;
 
-                            if(greatestelbow_LAngle < 160){
+                            if(elbow_angleR < 160){
                                 incorrect_score++;
                                 userFeedback.add("Your Left Elbow angle is wrong.");
                                 speak.speak("This is an incorrect move because your Left Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
 
-                            } else if (greatestelbow_RAngle < 160) {
+                            } else if (elbow_angleL < 160) {
                                 incorrect_score++;
                                 userFeedback.add("Your Right Elbow angle is wrong");
                                 speak.speak("This is an incorrect move because your Right Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
-
                             } else if (greatesthip_shoulder_LAngle>120 ) {
                                 incorrect_score++;
-                                userFeedback.add("Lower your Left shoulder to correct the shoulder angle.");
-                                speak.speak("This is an incorrect move because your Left shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+                                userFeedback.add("Lower your shoulders to correct the shoulder angle.");
+                                speak.speak("This is an incorrect move because your shoulders angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
 
-                            }else if (greatesthip_shoulder_LAngle<100 ) {
+                            }else if (greatesthip_shoulder_LAngle<90 ) {
                                 incorrect_score++;
-                                userFeedback.add("Raise your Left shoulder to correct the shoulder angle.");
-                                speak.speak("This is an incorrect move because your Left shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+                                userFeedback.add("Raise your shoulders to correct the shoulder angle.");
+                                speak.speak("This is an incorrect move because your shoulders angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
 
                             } else if (greatesthip_shoulder_RAngle>120 ) {
                                 incorrect_score++;
-                                userFeedback.add("Lower your Right shoulder to correct the shoulder angle.");
-                                speak.speak("This is an incorrect move because your Right shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+                                userFeedback.add("Lower your shoulders to correct the shoulder angle.");
+                                speak.speak("This is an incorrect move because your shoulders angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
                             }
-                            else if (greatesthip_shoulder_RAngle<100 ) {
+                            else if (greatesthip_shoulder_RAngle<90 ) {
                                 incorrect_score++;
-                                userFeedback.add("Raise your Right shoulder to correct the shoulder angle.");
-                                speak.speak("This is an incorrect move because your Right shoulder angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+                                userFeedback.add("Raise your shoulders to correct the shoulder angle.");
+                                speak.speak("This is an incorrect move because your shoulders angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
                             }
                             else{
                                 correct_score++;
@@ -386,30 +380,52 @@ public class view_LateralRaise_camera extends AppCompatActivity {
                         incorrect_scoree.setText("InCorrect: "+incorrect_score);
 
                         if(current_score==goal && !feedbackSpoken){
-                            finish_letralRaise.setVisibility(View.VISIBLE);
-                            speak.speak("You finish your exercise please press the button to see feedback about your moves",TextToSpeech.QUEUE_ADD,null);
+//                            finish_letralRaise.setVisibility(View.VISIBLE);
+                            speak.speak("You finish your exercise please check our feedback",TextToSpeech.QUEUE_ADD,null);
                             feedbackSpoken = true;
                             complete_exercise=true;
+                            String email = userEmail.toString();
+                            String ex_name = lastUserGoal.getname().toString();
+                            int goall = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
+                            int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
+                            int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
+                            double accuracy = (double) correctScore / (correctScore + incorrectScore);
+                            String workoutFeedback = TextUtils.join(", ", userFeedback);
+                            SendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
+                            boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
+                            if (inserted) {
+                                Toast.makeText(view_LateralRaise_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(getApplicationContext(), Feedback.class);
+                                        startActivity(intent);
+                                    }
+                                }, 2000); // 2000 milliseconds = 2 seconds delay
+                            } else {
+                                Toast.makeText(view_LateralRaise_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                         finish_letralRaise.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                String email = userEmail.toString();
-                                String ex_name = lastUserGoal.getname().toString();
-                                int goal = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
-                                int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
-                                int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
-                                double accuracy = (double) correctScore / (correctScore + incorrectScore);
-                                String workoutFeedback = TextUtils.join(", ", userFeedback);
-                                SendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                if (inserted) {
-                                    Toast.makeText(view_LateralRaise_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(view_LateralRaise_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
-                                }
+//                                String email = userEmail.toString();
+//                                String ex_name = lastUserGoal.getname().toString();
+//                                int goal = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
+//                                int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
+//                                int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
+//                                double accuracy = (double) correctScore / (correctScore + incorrectScore);
+//                                String workoutFeedback = TextUtils.join(", ", userFeedback);
+//                                SendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
+//                                boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
+//                                if (inserted) {
+//                                    Toast.makeText(view_LateralRaise_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+//                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
+//                                    startActivity(intent);
+//                                } else {
+//                                    Toast.makeText(view_LateralRaise_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+//                                }
                             }
                         });
 

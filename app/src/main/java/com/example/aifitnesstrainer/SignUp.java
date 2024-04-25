@@ -62,10 +62,10 @@ public class SignUp extends AppCompatActivity {
                 String confirmPassword = signupConfirm.getText().toString();
                 String randomPassword = generateRandomPassword();
                 String hashedPassword = hashPassword(password);
-                SendMail(email,name,phone,randomPassword);
+//                SendMail(email,name,phone,randomPassword);
                 String birthdate = birthday.getText().toString();
-                if (name.equals("") ||birthdate.equals("") ||email.equals("") || phone.equals("")
-                        || password.equals("")|| confirmPassword.equals(""))
+                if (name.equals("") &&birthdate.equals("") &&email.equals("") && phone.equals("")
+                        && password.equals("")&& confirmPassword.equals(""))
                     Toast.makeText(SignUp.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
                 else {
                     if (password.equals(confirmPassword)) {
@@ -74,7 +74,7 @@ public class SignUp extends AppCompatActivity {
                         if (!checkUserEmail) {
                             Boolean insert = databaseHelper.insertuser(email,name,phone,hashedPassword,birthdate);
                             if (insert) {
-                                Toast.makeText(SignUp.this, "Signup Successfully, please check your email to know your password", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SignUp.this, "Signup Successfully", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(), Login.class);
                                 startActivity(intent);
                             } else {

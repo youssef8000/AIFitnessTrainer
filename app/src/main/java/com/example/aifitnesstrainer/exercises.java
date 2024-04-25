@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.example.aifitnesstrainer.exersices.Dumbbell_Tricep.dumbbell__tricep;
 import com.example.aifitnesstrainer.exersices.Lateral_raise.lateral_raise;
 import com.example.aifitnesstrainer.exersices.Lunge.lunge_exercise;
+import com.example.aifitnesstrainer.exersices.PushUp.pushUp;
 import com.example.aifitnesstrainer.exersices.ShoulderPress.shoulderPress_exercise;
 import com.example.aifitnesstrainer.exersices.squat.squat_exercise;
 
@@ -36,6 +39,8 @@ public class exercises extends Fragment {
         Button lunge_exercise=view.findViewById(R.id.lunge);
         Button lateral_raises=view.findViewById(R.id.lateral_raises);
         Button ShoulderPress=view.findViewById(R.id.Shoulder_press);
+        Button dumbbell_tricep=view.findViewById(R.id.dumbbell);
+        Button pushup=view.findViewById(R.id.Push_up);
 
         squat_exercise.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +64,18 @@ public class exercises extends Fragment {
             @Override
             public void onClick(View v) {
                 openFragment(new shoulderPress_exercise());
+            }
+        });
+        dumbbell_tricep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragment(new dumbbell__tricep());
+            }
+        });
+        pushup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFragment(new pushUp());
             }
         });
         return view;

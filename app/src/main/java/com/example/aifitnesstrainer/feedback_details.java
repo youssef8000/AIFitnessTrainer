@@ -36,7 +36,7 @@ public class feedback_details extends Fragment {
         exercise_goal.setText("Your Goal: "+feedback.getGoal());
         exercise_correct.setText("Your Correct repetition: "+feedback.getCorrect_score());
         exercise_incorrect.setText("Your InCorrect repetition: "+feedback.getIncorrect_score());
-        exercise_accuracy.setText("Your Accuracy: "+feedback.getAccuracy()*100+"%");
+        exercise_accuracy.setText("Your Accuracy: "+String.format("%.2f%%", feedback.getAccuracy() * 100));
         exercise_feedback.setText("Our Feedback: "+feedback.getWorkoutFeedback());
 
         return view;

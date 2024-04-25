@@ -1,4 +1,4 @@
-package com.example.aifitnesstrainer.exersices.ShoulderPress;
+package com.example.aifitnesstrainer.exersices.PushUp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,14 +10,11 @@ import androidx.camera.core.ImageProxy;
 import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
-import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
-import android.os.CountDownTimer;
-import android.os.Handler;
-import android.speech.tts.TextToSpeech;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +26,9 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -41,6 +41,7 @@ import com.example.aifitnesstrainer.DatabaseHelper;
 import com.example.aifitnesstrainer.Display;
 import com.example.aifitnesstrainer.Feedback;
 import com.example.aifitnesstrainer.JavaMailAPI;
+import com.example.aifitnesstrainer.R;
 import com.example.aifitnesstrainer.User;
 import com.example.aifitnesstrainer.user_goal;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -52,22 +53,21 @@ import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.PoseLandmark;
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions;
+import org.opencv.core.Point;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-import com.example.aifitnesstrainer.R;
-import org.opencv.core.Point;
 
-public class ShoulderPress_camera extends AppCompatActivity {
-
+public class pushUp_camera extends AppCompatActivity {
     DatabaseHelper databaseHelper;
-    Button finish_squat;
+    Button finish_letralRaise;
     int PERMISSION_REQUESTS = 1;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
     PreviewView previewView;
+    // Base pose detector with streaming frames, when depending on the pose-detection sdk
     PoseDetectorOptions options =
             new PoseDetectorOptions.Builder()
                     .setDetectorMode(PoseDetectorOptions.STREAM_MODE)
@@ -78,22 +78,19 @@ public class ShoulderPress_camera extends AppCompatActivity {
     Paint paint = new Paint();
     Paint ErrorPaint = new Paint();
     Display display;
-    ProgressBar circularProgressBar;
     Bitmap bitmap4Save;
     ArrayList<Bitmap> bitmapArrayList = new ArrayList<>();
     ArrayList<Bitmap> bitmap4DisplayArrayList = new ArrayList<>();
     ArrayList<Pose> poseArrayList = new ArrayList<>();
     boolean isRunning = false;
-    List<Integer> rightShoulderAngles = new ArrayList<>();
-    List<Integer> leftShoulderAngles = new ArrayList<>();
-    List<Integer> rightElbowAngles = new ArrayList<>();
-    List<Integer> leftElbowAngles = new ArrayList<>();
-    List<Integer> seqStateLeft = new ArrayList<>();
-    List<Integer> seqStateRight = new ArrayList<>();
-    List<String> userFeedback = new ArrayList<>();
-    TextToSpeech speak;
-    boolean feedbackSpoken = false;
     boolean complete_exercise = false;
+    boolean feedbackSpoken = false;
+    TextToSpeech speak;
+    ProgressBar circularProgressBar;
+    List<Integer> elbow_RAngles = new ArrayList<>();
+    List<Integer> hip_shoulder_RAngles = new ArrayList<>();
+    List<Integer> lateralLeftState = new ArrayList<>();
+    List<String> userFeedback = new ArrayList<>();
     int current_score=0;
     int incorrect_score=0;
     int correct_score=0;
@@ -101,7 +98,7 @@ public class ShoulderPress_camera extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shoulder_press_camera);
+        setContentView(R.layout.activity_push_up_camera);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         previewView = findViewById(R.id.preview);
         display = findViewById(R.id.display);
@@ -118,20 +115,17 @@ public class ShoulderPress_camera extends AppCompatActivity {
         ErrorPaint.setColor(Color.RED);
         ErrorPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         ErrorPaint.setStrokeWidth(5);
-        finish_squat= findViewById(R.id.finish);
+        finish_letralRaise= findViewById(R.id.finish);
         speak=new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-
                 if(status != TextToSpeech.ERROR){
                     speak.setLanguage(Locale.ENGLISH);
                 }
             }
         });
         startCircularTimer();
-
     }
-
     @SuppressLint("ObjectAnimatorBinding")
     @ExperimentalGetImage
     private void startCircularTimer() {
@@ -156,11 +150,11 @@ public class ShoulderPress_camera extends AppCompatActivity {
                     }
                 }, ContextCompat.getMainExecutor(getApplicationContext()));
                 if (!allPermissionsGranted()) {
-                    getRuntimePermissions();
-                }            }
+                    OpenCamera();
+                }
+            }
         }.start();
     }
-
     Runnable RunMlkit = new Runnable() {
         @Override
         public void run() {
@@ -192,6 +186,7 @@ public class ShoulderPress_camera extends AppCompatActivity {
 //                        .setTargetResolution(new Size(1280, 720))
                         .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                         .build();
+
         imageAnalysis.setAnalyzer(ActivityCompat.getMainExecutor(this), new ImageAnalysis.Analyzer() {
             @Override
             public void analyze(@NonNull ImageProxy imageProxy) {
@@ -210,9 +205,11 @@ public class ShoulderPress_camera extends AppCompatActivity {
                     for (PoseLandmark poseLandmark : poseArrayList.get(0).getAllPoseLandmarks()) {
 
                         if (poseLandmark.getLandmarkType() == PoseLandmark.NOSE ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_KNEE ||
+                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_SHOULDER ||
+                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_ELBOW ||
+                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_WRIST ||
+                                poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_HIP ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_KNEE ||
-                                poseLandmark.getLandmarkType() == PoseLandmark.LEFT_ANKLE ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_ANKLE ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_PINKY ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_PINKY ||
@@ -235,8 +232,8 @@ public class ShoulderPress_camera extends AppCompatActivity {
                                 poseLandmark.getLandmarkType() == PoseLandmark.LEFT_MOUTH ||
                                 poseLandmark.getLandmarkType() == PoseLandmark.RIGHT_MOUTH) {
                             continue;
-
                         }
+                        // Draw circle for other landmarks
                         canvas.drawCircle(poseLandmark.getPosition().x, poseLandmark.getPosition().y, 3, mPaint);
                     }
                     databaseHelper = new DatabaseHelper(getApplicationContext());
@@ -250,136 +247,90 @@ public class ShoulderPress_camera extends AppCompatActivity {
                     EditText incorrect_scoree = findViewById(R.id.incorrect_score);
                     int goal = lastUserGoal.getgoal();
 
-                    // For the Left side
-                    PoseLandmark elbow = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_ELBOW);
-                    PoseLandmark wrist = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_WRIST);
-                    PoseLandmark shoulder = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_SHOULDER);
-                    PoseLandmark hip = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_HIP);
-
-                    // For the right side
-                    PoseLandmark elbowr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_ELBOW);
-                    PoseLandmark wristr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_WRIST);
-                    PoseLandmark shoulderr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_SHOULDER);
-                    PoseLandmark hipr = poseArrayList.get(0).getPoseLandmark(PoseLandmark.RIGHT_HIP);
+                    PoseLandmark shoulderr12 = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_SHOULDER);
+                    PoseLandmark elbowr14 = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_ELBOW);
+                    PoseLandmark wristr16 = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_WRIST);
+                    PoseLandmark hipr24 = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_HIP);
+                    PoseLandmark knee26 = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_KNEE);
+                    PoseLandmark ankle28 = poseArrayList.get(0).getPoseLandmark(PoseLandmark.LEFT_ANKLE);
 
                     EditText errormessage = findViewById(R.id.errorEditText);
-                    EditText ErrorelbowLMessage = findViewById(R.id.shoulderError);
-                    EditText ErrorelbowRMessage = findViewById(R.id.hipError);
-                    EditText ErrorShoulderLMessage = findViewById(R.id.elbowError);
-                    EditText ErrorShoulderRMessage = findViewById(R.id.wristError);
+                    EditText ErrorshoulderMessage = findViewById(R.id.hipError);
+                    EditText shoulderMessage = findViewById(R.id.ankleError);
 
-                    if (shoulder != null && elbow != null && wrist != null
-                            && shoulderr != null && elbowr != null && wristr != null && hip != null && hipr != null) {
-                        // Draw lines for the left side
-                        drawLineBetweenLandmarks(wrist, elbow);
-                        drawLineBetweenLandmarks(elbow, shoulder);
-                        drawLineBetweenLandmarks(shoulder, hip);
-                        // Draw lines for the right side
-                        drawLineBetweenLandmarks(wristr, elbowr);
-                        drawLineBetweenLandmarks(elbowr, shoulderr);
-                        drawLineBetweenLandmarks(shoulderr, hipr);
+                    if (shoulderr12 != null && elbowr14 != null && wristr16 != null
+                            && hipr24 !=null && knee26 !=null && ankle28 !=null) {
+                        drawLineBetweenLandmarks(shoulderr12, elbowr14);
+                        drawLineBetweenLandmarks(elbowr14, wristr16);
+                        drawLineBetweenLandmarks(shoulderr12, hipr24);
+                        drawLineBetweenLandmarks(hipr24, knee26);
+                        drawLineBetweenLandmarks(knee26, ankle28);
 
-                        drawLineBetweenLandmarks(shoulderr, shoulder);
-                        drawLineBetweenLandmarks(hip, hipr);
+                        Point rightHipCoord = new Point(hipr24.getPosition().x, hipr24.getPosition().y);
+                        Point rightWristCoord = new Point(wristr16.getPosition().x, wristr16.getPosition().y);
+                        Point rightShldrCoord = new Point(shoulderr12.getPosition().x, shoulderr12.getPosition().y);
+                        Point rightelbowCoord = new Point(elbowr14.getPosition().x, elbowr14.getPosition().y);
+                        Point rightkneeCoord = new Point(knee26.getPosition().x, knee26.getPosition().y);
+                        Point rightankleCoord = new Point(ankle28.getPosition().x, ankle28.getPosition().y);
 
-                        Point leftHipCoord = new Point(hipr.getPosition().x, hipr.getPosition().y);
-                        Point leftWristCoord = new Point(wristr.getPosition().x, wristr.getPosition().y);
-                        Point leftShldrCoord = new Point(shoulderr.getPosition().x, shoulderr.getPosition().y);
-                        Point leftelbowCoord = new Point(elbowr.getPosition().x, elbowr.getPosition().y);
-
-                        Point rightHipCoord = new Point(hip.getPosition().x, hip.getPosition().y);
-                        Point rightWristCoord = new Point(wrist.getPosition().x, wrist.getPosition().y);
-                        Point rightShldrCoord = new Point(shoulder.getPosition().x, shoulder.getPosition().y);
-                        Point rightelbowCoord = new Point(elbow.getPosition().x, elbow.getPosition().y);
-
-                        double leftHipWristShldrAngle = findAngle(leftHipCoord, leftWristCoord, leftShldrCoord);
                         double rightHipWristShldrAngle  = findAngle(rightHipCoord, rightWristCoord, rightShldrCoord);
-                        double leftshldrwristelbowangle  = findAngle(leftShldrCoord, leftWristCoord, leftelbowCoord);
                         double rightshldrwristelbowangle = findAngle(rightShldrCoord, rightWristCoord, rightelbowCoord);
+                        double rightknee = findAngle(rightHipCoord, rightankleCoord, rightkneeCoord);
+                        double righthip = findAngle(rightShldrCoord, rightkneeCoord, rightHipCoord);
 
                         int shoulderR = (int) Math.round(rightHipWristShldrAngle);
-                        int shoulderl = (int) Math.round(leftHipWristShldrAngle);
+                        int kneeR = (int) Math.round(rightknee);
                         int elbow_angleR = (int) Math.round(rightshldrwristelbowangle);
-                        int elbow_angleL = (int) Math.round(leftshldrwristelbowangle);
 
-                        leftShoulderAngles.add(shoulderl);
-                        leftElbowAngles.add(elbow_angleL);
-                        rightShoulderAngles.add(shoulderR);
-                        rightElbowAngles.add(elbow_angleR);
+                        elbow_RAngles.add(elbow_angleR);
+                        Collections.sort(elbow_RAngles);
+                        int greatestelbowRAngle = !elbow_RAngles.isEmpty() ? elbow_RAngles.get(0) : 0;
 
-                        // For the left side
-                        Collections.sort(rightElbowAngles, Collections.reverseOrder());
-                        int greatestelbow_RAngle = !rightElbowAngles.isEmpty() ? rightElbowAngles.get(0) : 0;
+                        hip_shoulder_RAngles.add(shoulderR);
+                        Collections.sort(hip_shoulder_RAngles, Collections.reverseOrder());
 
-                        Collections.sort(leftElbowAngles, Collections.reverseOrder());
-                        int greatestelbow_LAngle = !leftElbowAngles.isEmpty() ? leftElbowAngles.get(0) : 0;
-
-                        Collections.sort(rightShoulderAngles, Collections.reverseOrder());
-                        int greatesthip_shoulder_RAngle = !rightShoulderAngles.isEmpty() ? rightShoulderAngles.get(0) : 0;
-
-                        Collections.sort(leftShoulderAngles, Collections.reverseOrder());
-                        int greatesthip_shoulder_LAngle = !leftShoulderAngles.isEmpty() ? leftShoulderAngles.get(0) : 0;
-
-                        int currentStateLeft = getStateLeft(elbow_angleL,shoulderl);
-                        int currentStateRight = getStateRight(elbow_angleR,shoulderR);
-                        if (!seqStateLeft.contains(currentStateLeft) ) {
-                            seqStateLeft.add(currentStateLeft);
+                        int current_state_Left = getStateLeft(elbow_angleR,shoulderR);
+                        if (!lateralLeftState.contains(current_state_Left)) {
+                            lateralLeftState.add(current_state_Left);
                         }
-                        Collections.sort(seqStateLeft, Collections.reverseOrder());
+                        Collections.sort(lateralLeftState, Collections.reverseOrder());
 
-                        if (!seqStateRight.contains(currentStateLeft) ) {
-                            seqStateRight.add(currentStateRight);
-                        }
-                        Collections.sort(seqStateRight, Collections.reverseOrder());
+                        if ((lateralLeftState.get(0) == 3 && current_state_Left == 1 && !complete_exercise
+                                && shoulderR>60) ||
+                                (lateralLeftState.get(0) == 2 && current_state_Left == 1 && !complete_exercise
+                                        && shoulderR>60)) {
 
-                        // For the left side
-                        if ((seqStateLeft.get(0) == 3 && currentStateLeft == 1 && !complete_exercise
-                                &&seqStateRight.get(0)==3 && currentStateLeft==1) ||
-                                (seqStateLeft.get(0) == 2 && currentStateLeft == 1 && !complete_exercise
-                                        &seqStateRight.get(0)==2 && currentStateLeft==1 )) {
-
-                            int previous_score = current_score;
+                            int previous_score=current_score;
                             current_score++;
-                            if (greatesthip_shoulder_LAngle < 170 || greatesthip_shoulder_LAngle < 140) {
-                                incorrect_score++;
-                                userFeedback.add("Keep your shoulders stable and avoid excessive arching or shrugging.");
-                                speak.speak("This is an incorrect move because your left shoulder position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
-                            }else if (greatesthip_shoulder_RAngle < 170 || greatesthip_shoulder_RAngle < 140) {
-                                incorrect_score++;
-                                userFeedback.add("Keep your shoulders stable and avoid excessive arching or shrugging.");
-                                speak.speak("This is an incorrect move because your right shoulder position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
-                            }
-                            else if ((greatestelbow_LAngle < 155 && shoulderl>130) || (greatestelbow_LAngle < 85 && shoulderl>130)) {
-                                incorrect_score++;
-                                userFeedback.add("Keep your elbows close to your body and don't lock them out at the top.");
-                                speak.speak("This is an incorrect move because your left elbow position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
-                            } else if ((greatestelbow_RAngle < 155 && shoulderR>130) || (greatestelbow_RAngle < 85 && shoulderR>130)) {
-                                incorrect_score++;
-                                userFeedback.add("Keep your elbows close to your body and don't lock them out at the top.");
-                                speak.speak("This is an incorrect move because your right elbow position is incorrect.", TextToSpeech.QUEUE_FLUSH, null);
-                            }else {
-                                correct_score++;
-                                speak.speak("This is a correct move.", TextToSpeech.QUEUE_FLUSH, null);
-                            }
-                            int new_score = current_score;
+                            int new_score=current_score;
 
-                            if (new_score >previous_score) {
-                                leftShoulderAngles.clear();
-                                rightShoulderAngles.clear();
-                                rightElbowAngles.clear();
-                                leftElbowAngles.clear();
-                                seqStateLeft.clear();
-                                seqStateLeft.add(0);
-                                seqStateRight.clear();
-                                seqStateRight.add(0);
+                            if(greatestelbowRAngle < 60 ){
+                                incorrect_score++;
+                                userFeedback.add("Your Elbow angle is wrong,please your arm is too deep.");
+                                speak.speak("This is an incorrect move because your Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+
+                            } else if (greatestelbowRAngle>100 && greatestelbowRAngle<150) {
+                                incorrect_score++;
+                                userFeedback.add("Your Elbow angle is wrong,please your arm is raised.");
+                                speak.speak("This is an incorrect move because your Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+                            } else{
+                                correct_score++;
+                                speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
+                            }
+
+                            if (new_score > previous_score) {
+                                // Clear all lists
+                                elbow_RAngles.clear();
+                                hip_shoulder_RAngles.clear();
+                                lateralLeftState.clear();
+                                lateralLeftState.add(0);
                             }
                         }
-
                         goalEditText.setText("Goal: "+current_score+" / "+goal);
                         correct_scoree.setText("Correct: "+correct_score);
                         incorrect_scoree.setText("InCorrect: "+incorrect_score);
+
                         if(current_score==goal && !feedbackSpoken){
-//                            finish_squat.setVisibility(View.VISIBLE);
                             speak.speak("You finish your exercise please check our feedback",TextToSpeech.QUEUE_ADD,null);
                             feedbackSpoken = true;
                             complete_exercise=true;
@@ -390,10 +341,10 @@ public class ShoulderPress_camera extends AppCompatActivity {
                             int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
                             double accuracy = (double) correctScore / (correctScore + incorrectScore);
                             String workoutFeedback = TextUtils.join(", ", userFeedback);
-//                                sendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
+                            SendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
                             boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
                             if (inserted) {
-                                Toast.makeText(ShoulderPress_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(pushUp_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -402,97 +353,27 @@ public class ShoulderPress_camera extends AppCompatActivity {
                                     }
                                 }, 2000); // 2000 milliseconds = 2 seconds delay
                             } else {
-                                Toast.makeText(ShoulderPress_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(pushUp_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                             }
 
                         }
-                        finish_squat.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String email = userEmail.toString();
-                                String ex_name = lastUserGoal.getname().toString();
-                                int goal = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
-                                int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
-                                int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
-                                double accuracy = (double) correctScore / (correctScore + incorrectScore);
-                                String workoutFeedback = TextUtils.join(", ", userFeedback);
-                                sendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                if (inserted) {
-                                    Toast.makeText(ShoulderPress_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(ShoulderPress_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
-                                }
 
-                            }
-                        });
-
+//                        shoulderMessage.setText("shoulder angle: " +shoulderR + "/ knee angle:"+ kneeR);
                         errormessage.setText("");
 
-                        // Update ElbowLeft Message
-                        if (elbow_angleL < 155 && elbow_angleL > 140 ) {
-                            ErrorelbowLMessage.setText("");
-                            drawErrorLineBetweenLandmarks(wrist, elbow);
-                            ErrorelbowLMessage.setText("Avoid excessive Elbow flexion");
-                        } else if (elbow_angleL < 80 ) {
-                            ErrorelbowLMessage.setText("");
-                            drawErrorLineBetweenLandmarks(wrist, elbow);
-                            ErrorelbowLMessage.setText("Increase Elbow flexion");
+                        // Update Elbow Message
+                        if(elbow_angleR < 150 && elbow_angleR > 100){
+                            ErrorshoulderMessage.setText("your arm is raised,please lower your arm.");
+                            drawErrorLineBetweenLandmarks(elbowr14, wristr16);
+                        } else if(elbow_angleR < 60 ){
+                            ErrorshoulderMessage.setText("your arm is too deep,please raise your arm.");
+                            drawErrorLineBetweenLandmarks(elbowr14, wristr16);
                         } else {
-                            // If the Elbow angle is within acceptable range
-                            drawLineBetweenLandmarks(wrist, elbow);
-                            ErrorelbowLMessage.setText("");
+                            drawLineBetweenLandmarks(elbowr14, wristr16);
+                            ErrorshoulderMessage.setText("");
                         }
-
-                        // Update ElbowRight Message
-                        if (elbow_angleR < 155 && elbow_angleR > 140) {
-                            ErrorelbowRMessage.setText("");
-                            drawErrorLineBetweenLandmarks(wristr, elbowr);
-                            ErrorelbowRMessage.setText("Avoid excessive Elbow flexion");
-                        } else if ( elbow_angleR < 80 ) {
-                            // If the Elbow angle indicates insufficient shoulder flexion
-                            ErrorelbowRMessage.setText("");
-                            drawErrorLineBetweenLandmarks(wristr, elbowr);
-                            ErrorelbowRMessage.setText("Increase Elbow flexion");
-                        } else {
-                            drawLineBetweenLandmarks(wristr, elbowr);
-                            ErrorelbowRMessage.setText("");
-                        }
-
-                        // Update ShoulderLeft Message
-                        if (shoulderl < 170 && shoulderl > 150) {
-                            // If the shoulder angle indicates excessive shoulder flexion
-                            ErrorShoulderLMessage.setText("");
-                            drawErrorLineBetweenLandmarks(elbow, shoulder);
-                            ErrorShoulderLMessage.setText("Avoid excessive shoulder flexion");
-                        } else if ( shoulderl < 135 && shoulderl > 50 ) {
-                            // If the Elbow angle indicates insufficient shoulder flexion
-                            ErrorShoulderLMessage.setText("");
-                            drawErrorLineBetweenLandmarks(elbow, shoulder);
-                            ErrorShoulderLMessage.setText("Increase shoulder flexion");
-                        } else {
-                            drawLineBetweenLandmarks(elbow, shoulder);
-                            ErrorShoulderLMessage.setText("");
-                        }
-
-                        // Update ShoulderRight Message
-                        if (shoulderR < 170 && shoulderR > 150 ) {
-                            ErrorShoulderRMessage.setText("");
-                            drawErrorLineBetweenLandmarks(elbowr, shoulderr);
-                            ErrorShoulderRMessage.setText("Avoid excessive shoulder flexion");
-                        } else if ( shoulderR < 135 && shoulderR > 50 ) {
-                            ErrorShoulderRMessage.setText("");
-                            drawErrorLineBetweenLandmarks(elbowr, shoulderr);
-                            ErrorShoulderRMessage.setText("Increase shoulder flexion");
-                        } else {
-                            drawLineBetweenLandmarks(elbowr, shoulderr);
-                            ErrorShoulderRMessage.setText("");
-                        }
-
                     } else {
-                        errormessage.setText("Some landmarks are missing for squat detection");
+                        errormessage.setText("Some landmarks are missing for lateral raise detection");
                     }
 
                     bitmap4DisplayArrayList.clear();
@@ -503,6 +384,7 @@ public class ShoulderPress_camera extends AppCompatActivity {
                     poseArrayList.clear();
                     isRunning = false;
                 }
+
                 if (poseArrayList.size() == 0 && bitmapArrayList.size() >= 1 && !isRunning) {
                     RunMlkit.run();
                     isRunning = true;
@@ -515,7 +397,7 @@ public class ShoulderPress_camera extends AppCompatActivity {
         });
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
     }
-    private void sendMail(String email, String userName,String ex_name, int goal, int correctScore, int incorrectScore, double accuracy, String workoutFeedback) {
+    private void SendMail(String email, String userName,String ex_name, int goal, int correctScore, int incorrectScore, double accuracy, String workoutFeedback) {
         String subject = "Feedback about your training for this exercise";
         String message = "Dear, " + userName
                 + "\nYou've finished your workout and here are our training notes for this workout"
@@ -524,33 +406,21 @@ public class ShoulderPress_camera extends AppCompatActivity {
                 + "\nYour Correct repetition: " + correctScore
                 + "\nYour Incorrect repetition: " + incorrectScore
                 + "\nOur Feedback: " + workoutFeedback
-                + "\nYour Accuracy: " + accuracy
+                + "\nYour Accuracy: " + (accuracy*100)+"%"
                 + "\nKeep going and do your best.";
-
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, email, subject, message);
         javaMailAPI.execute();
     }
-    private int getStateRight(int elbow_angleR , int shoulder_angleR) {
+    private int getStateLeft(int elbowRAngle ,int shoulderRAngle) {
         int elbowRight = 0;
-        if ( elbow_angleR >=80 && elbow_angleR <120 && shoulder_angleR>130) {
+        if ( elbowRAngle < 180 && elbowRAngle >= 150 && shoulderRAngle > 65 && shoulderRAngle < 91) {
             elbowRight = 1;
-        } else if (elbow_angleR >=120 && elbow_angleR <150 && shoulder_angleR>130) {
+        } else if ( elbowRAngle < 150 && elbowRAngle >= 100 && shoulderRAngle > 65 && shoulderRAngle < 91) {
             elbowRight = 2;
-        } else if ( elbow_angleR >=150 && elbow_angleR <180 && shoulder_angleR>130) {
+        } else if ( elbowRAngle < 100 && elbowRAngle >= 60 && shoulderRAngle > 65 && shoulderRAngle < 91) {
             elbowRight = 3;
         }
         return elbowRight;
-    }
-    private int getStateLeft(int elbow_angleL , int shoulder_angleL) {
-        int elbowLeft = 0;
-        if ( elbow_angleL>=80 && elbow_angleL<120 && shoulder_angleL>130) {
-            elbowLeft = 1;
-        } else if ( elbow_angleL>=120 && elbow_angleL<150 && shoulder_angleL>130) {
-            elbowLeft = 2;
-        } else if ( elbow_angleL>=150 && elbow_angleL<180 && shoulder_angleL>130) {
-            elbowLeft = 3;
-        }
-        return elbowLeft;
     }
     public static double findAngle(Point p1, Point p2, Point refPt) {
         double p1RefX = p1.x - refPt.x;
@@ -561,7 +431,6 @@ public class ShoulderPress_camera extends AppCompatActivity {
                 (Math.sqrt(p1RefX * p1RefX + p1RefY * p1RefY) * Math.sqrt(p2RefX * p2RefX + p2RefY * p2RefY));
         double theta = Math.acos(Math.min(Math.max(cosTheta, -1.0), 1.0));
         double degree = Math.toDegrees(theta);
-
         return degree;
     }
     private void drawLineBetweenLandmarks(PoseLandmark landmark1, PoseLandmark landmark2) {
@@ -616,7 +485,7 @@ public class ShoulderPress_camera extends AppCompatActivity {
         }
         return false;
     }
-    private void getRuntimePermissions() {
+    private void OpenCamera() {
         List<String> allNeededPermissions = new ArrayList<>();
         for (String permission : getRequiredPermissions()) {
             if (!isPermissionGranted(this, permission)) {

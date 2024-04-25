@@ -13,6 +13,7 @@ import androidx.camera.view.PreviewView;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -315,10 +316,31 @@ public class squat_view_camera extends AppCompatActivity {
                         correct_scoree.setText("Correct: "+correct_score);
                         incorrect_scoree.setText("InCorrect: "+incorrect_score);
                         if(current_score==goal && !feedbackSpoken){
-                            finish_squat.setVisibility(View.VISIBLE);
-                            speak.speak("You finish your exercise please press the button to see feedback about your moves",TextToSpeech.QUEUE_ADD,null);
+//                            finish_squat.setVisibility(View.VISIBLE);
+                            speak.speak("You finish your exercise please check our feedback",TextToSpeech.QUEUE_ADD,null);
                             feedbackSpoken = true;
                             complete_exercise=true;
+                            String email = userEmail.toString();
+                            String ex_name = lastUserGoal.getname().toString();
+                            int goall = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
+                            int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
+                            int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
+                            double accuracy = (double) correctScore / (correctScore + incorrectScore);
+                            String workoutFeedback = TextUtils.join(", ", userFeedback);
+                            SendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
+                            boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
+                            if (inserted) {
+                                Toast.makeText(squat_view_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(getApplicationContext(), Feedback.class);
+                                        startActivity(intent);
+                                    }
+                                }, 2000); // 2000 milliseconds = 2 seconds delay
+                            } else {
+                                Toast.makeText(squat_view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                            }
                         }
                         finish_squat.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -445,7 +467,7 @@ public class squat_view_camera extends AppCompatActivity {
             } else if (greatestKneeAngle > 50 && greatestKneeAngle < 80) {
                 incorrect_score++;
                 userFeedback.add("Lower your hip to correct the knee angle.");
-                speak.speak("This is an incorrect movement because your hip is higher than your knee", TextToSpeech.QUEUE_FLUSH, null);
+                speak.speak("This is an incorrect move because your hip is higher than your knee", TextToSpeech.QUEUE_FLUSH, null);
             } else if (greatestHipAngle > 45) {
                 incorrect_score++;
                 userFeedback.add("You are bending forward.");
@@ -469,7 +491,7 @@ public class squat_view_camera extends AppCompatActivity {
                 hipAngles.clear();
                 ankleAngles.clear();
                 seqState.clear();
-                seqState.add(0); // Add the initial state or any appropriate value
+                seqState.add(0);
             }
         }
     }
