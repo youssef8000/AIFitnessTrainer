@@ -28,20 +28,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/logo_removebg" />
+
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="250dp"
                     android:layout_height="50dp"
                     android:layout_marginLeft="15dp"
+                    android:layout_gravity="center|bottom"
                     android:text="AI Fitness Trainer"
                     android:textColor="@color/black"
-                    android:textSize="21dp"
+                    android:textSize="25dp"
                     android:textStyle="bold"
-                    android:padding="10dp" />
+                    android:padding="1dp" />
 
                 <ImageButton
                     android:id="@+id/btn_logout"
@@ -50,7 +53,7 @@
                     android:layout_gravity="end"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="8dp"
-                    android:layout_marginLeft="60dp"
+                    android:layout_marginLeft="10dp"
                     android:src="@drawable/ic_logout" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
@@ -78,11 +81,24 @@
                     android:id="@+id/bottom_nav"
                     app:labelVisibilityMode="labeled"
                     app:menu="@menu/bottom_menu"
+
                     app:itemIconTint="@color/white"
                     app:itemTextColor="@color/white"
                     android:background="@android:color/transparent"
                     />
             </com.google.android.material.bottomappbar.BottomAppBar>
+<!--            <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--                android:id="@+id/fab"-->
+<!--                android:layout_width="200dp"-->
+<!--                android:layout_height="70dp"-->
+<!--                android:layout_gravity="center_horizontal|bottom"-->
+<!--                android:layout_marginBottom="28dp"-->
+<!--                android:backgroundTint="@color/white"-->
+<!--                android:src="@drawable/ic_home"-->
+<!--                app:maxImageSize="60dp"-->
+<!--                app:fabCustomSize="70dp"-->
+<!--                app:tint="@color/black" />-->
+
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
     </RelativeLayout>
 

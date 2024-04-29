@@ -3,7 +3,6 @@ package com.example.aifitnesstrainer;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,7 +11,10 @@ import android.widget.ImageButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.example.aifitnesstrainer.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,13 +22,14 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
     private BottomNavigationView bottomNavigationView;
-
+//    FloatingActionButton homebutton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         logoutbtn = findViewById(R.id.btn_logout);
         toolbar = findViewById(R.id.toolbar_nav);
+//        homebutton= findViewById(R.id.fab);
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         setSupportActionBar(toolbar);
         bottomNavigationView.setBackground(null);
@@ -41,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+//        homebutton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openFragment(new homamainFragment());
+//            }
+//        });
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -53,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
                 else if (itemId == R.id.profile) {
-                    openUserFeedbackFragment();
+                    openFragment(new UserFeedback());
                 return true;
                 }
                 return false;
@@ -66,14 +75,5 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container, fragment);
         transaction.commit();
     }
-    private void openUserFeedbackFragment() {
-        // Create a new instance of the UserFeedback fragment
-        UserFeedback userFeedbackFragment = new UserFeedback();
-        // Begin a fragment transaction
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, userFeedbackFragment) // Replace fragment_container with the ID of your fragment container layout
-                .addToBackStack(null) // Add the transaction to the back stack
-                .commit();
-    }
+
 }

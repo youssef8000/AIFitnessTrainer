@@ -3,15 +3,25 @@
     <item
         android:id="@+id/home"
         android:title="Home"
-        android:icon="@drawable/ic_home"/>
+        android:icon="@drawable/home" />
+
     <item
         android:id="@+id/category"
         android:title="Workout"
-        android:icon="@drawable/ic_category"
-        />
+        android:icon="@drawable/trainer" />
+
+
+<!--    <item-->
+<!--        android:title="" />-->
 
     <item
         android:id="@+id/profile"
-        android:title="profile"
-        android:icon="@drawable/ic_camera"/>
+        android:title="My profile"
+        android:icon="@drawable/ic_camera" />
+
+    <item
+        android:id="@+id/my_feedback"
+        android:title="My feedback"
+        android:icon="@drawable/feedback" />
+
 </menu>

@@ -28,6 +28,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.view.View;
@@ -43,6 +44,7 @@ import com.example.aifitnesstrainer.Feedback;
 import com.example.aifitnesstrainer.JavaMailAPI;
 import com.example.aifitnesstrainer.R;
 import com.example.aifitnesstrainer.User;
+import com.example.aifitnesstrainer.exersices.squat.squat_view_camera;
 import com.example.aifitnesstrainer.user_goal;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -341,37 +343,37 @@ public class view_lunge_camera extends AppCompatActivity {
 
 
                         if(current_score==goal && !feedbackSpoken){
-                            finish_squat.setVisibility(View.VISIBLE);
+//                            finish_squat.setVisibility(View.VISIBLE);
                             speak.speak("You finish your exercise please press the button to see feedback about your moves",TextToSpeech.QUEUE_ADD,null);
                             feedbackSpoken = true;
                             complete_exercise=true;
-                        }
-                        finish_squat.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String email = userEmail.toString();
-                                String ex_name = lastUserGoal.getname().toString();
-                                int goal = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
-                                int rightcorrectScore = Integer.parseInt(rightcorrect_scoree.getText().toString().split(": ")[1]);
-                                int leftcorrectScore = Integer.parseInt(leftcorrect_scoree.getText().toString().split(": ")[1]);
-                                int correctScore = (rightcorrectScore+leftcorrectScore)/2;
-                                int rightincorrectScore = Integer.parseInt(rightincorrect_scoree.getText().toString().split(": ")[1]);
-                                int leftincorrectScore = Integer.parseInt(leftincorrect_scoree.getText().toString().split(": ")[1]);
-                                int incorrectScore = (rightincorrectScore+leftincorrectScore)/2;
-                                double accuracy = (double) correctScore / (correctScore + incorrectScore);
-                                String workoutFeedback = TextUtils.join(", ", userFeedback);
-                                SendMail(email, userName, ex_name, goal,
-                                        rightcorrectScore, leftcorrectScore,rightincorrectScore, leftincorrectScore,accuracy, workoutFeedback);
-                                boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                if (inserted) {
-                                    Toast.makeText(view_lunge_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(view_lunge_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
-                                }
+                            String email = userEmail.toString();
+                            String ex_name = lastUserGoal.getname().toString();
+                            int goal_ex = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
+                            int rightcorrectScore = Integer.parseInt(rightcorrect_scoree.getText().toString().split(": ")[1]);
+                            int leftcorrectScore = Integer.parseInt(leftcorrect_scoree.getText().toString().split(": ")[1]);
+                            int correctScore = (rightcorrectScore+leftcorrectScore)/2;
+                            int rightincorrectScore = Integer.parseInt(rightincorrect_scoree.getText().toString().split(": ")[1]);
+                            int leftincorrectScore = Integer.parseInt(leftincorrect_scoree.getText().toString().split(": ")[1]);
+                            int incorrectScore = (rightincorrectScore+leftincorrectScore)/2;
+                            double accuracy = (double) correctScore / (correctScore + incorrectScore);
+                            String workoutFeedback = TextUtils.join(", ", userFeedback);
+                            SendMail(email, userName, ex_name, goal_ex,
+                                    rightcorrectScore, leftcorrectScore,rightincorrectScore, leftincorrectScore,accuracy, workoutFeedback);
+                            boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal_ex, correctScore, incorrectScore, accuracy, workoutFeedback);
+                            if (inserted) {
+                                Toast.makeText(view_lunge_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(getApplicationContext(), Feedback.class);
+                                        startActivity(intent);
+                                    }
+                                }, 2000); // 2000 milliseconds = 2 seconds delay
+                            } else {
+                                Toast.makeText(view_lunge_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        }
 
                         errormessage.setText("");
                         EditText Kneangle = findViewById(R.id.kneeangle);
