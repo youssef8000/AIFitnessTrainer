@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/black"
+    android:layout_height="match_parent"
+    tools:context=".arabic.exersices_arabic.squat.squat_exercise_arabic">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="70dp"
+            tools:ignore="WebViewLayout"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Squat"
+                android:textStyle="bold"
+                android:textSize="30dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gifWebView"
+                android:layout_gravity="center"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_color"
+                android:text="بدء التمرين"
+                android:id="@+id/squat_camera"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="فوائد الsquat"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="الSquat هي طريقة رائعة لتعلم الشكل الصحيح للسكوات. بمجرد أن تتقنها، يمكنك المضي قدمًا للسكوات المجهزة بالأوزان بأمان وبمخاطر أقل بكثير من الإصابة."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="الSquat تساعد أيضًا في بناء أساس قوي من القوة والتوازن في الجزء السفلي من جسمك. إنها تستهدف الفخذين والعضلات الخلفية للفخذين والرباط الهلالي والأرداف بشكل خاص، مما يساعدك في زيادة كتلة العضلات في هذه المناطق. ونظرًا لأن التوازن ضروري، يمكن أن تشمل الSquat أيضًا عضلات الجسم الأساسية."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="كيفية أداء الSquat بشكل صحيح؟"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1- قف بقدميك على بعد حوالي عرض الكتف، وضع قدميك أماميك باتجاه الأمام، وجعل الركبتين فوق الإبهام الثاني والثالث."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2- انحني بأردافك نحو الأرض عن طريق الإنحناء في الوركين والركبتين، وتأكد من أن ركبتيك تتبع الإبهامين الثاني والثالث وأبقي كعبيك على الأرض. أثناء ذلك، اسمح للأرداف بالدفع للخلف والخروج من خلف جسمك كما لو كنت تجلس في كرسي. حافظ على صدرك مرفوعًا ورأسك وعنقك في وضع محايد. انخفض إلى عمق يسمح لك بالحفاظ على الشكل الصحيح. بالنسبة لبعض الأشخاص، قد يكون ذلك عندما تكون فخذيهما موازيتين للأرض، في حين قد لا يتمكن البعض الآخر من الذهاب إلى هذا الارتفاع."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3- ادفع بقدميك لدفع جسمك للأعلى وبعيدًا عن الأرض للوقوف، وحرك وركيك إلى الأمام حتى تعود إلى وضع البداية."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="100dp"
+                android:padding="10dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+</ScrollView>

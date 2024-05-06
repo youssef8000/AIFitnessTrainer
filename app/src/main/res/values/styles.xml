@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MyDatePickerDialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="android:background">@color/bg</item> <!-- Set the background color to white -->
+        <item name="android:background">@color/black</item> <!-- Set the background color to white -->
         <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
     </style>
 

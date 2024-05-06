@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.aifitnesstrainer.exersices.Dumbbell_Tricep.dumbbell__tricep;
 import com.example.aifitnesstrainer.exersices.Lateral_raise.lateral_raise;
@@ -35,12 +36,12 @@ public class exercises extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_exercises, container, false);
-        Button squat_exercise=view.findViewById(R.id.Squat);
-        Button lunge_exercise=view.findViewById(R.id.lunge);
-        Button lateral_raises=view.findViewById(R.id.lateral_raises);
-        Button ShoulderPress=view.findViewById(R.id.Shoulder_press);
-        Button dumbbell_tricep=view.findViewById(R.id.dumbbell);
-        Button pushup=view.findViewById(R.id.Push_up);
+        TextView squat_exercise=view.findViewById(R.id.Squat);
+        TextView lunge_exercise=view.findViewById(R.id.lunge);
+        TextView lateral_raises=view.findViewById(R.id.lateral_raises);
+        TextView ShoulderPress=view.findViewById(R.id.Shoulder_press);
+        TextView dumbbell_tricep=view.findViewById(R.id.dumbbell);
+        TextView pushup=view.findViewById(R.id.Push_up);
 
         squat_exercise.setOnClickListener(new View.OnClickListener() {
             @Override

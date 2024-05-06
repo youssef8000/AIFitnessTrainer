@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".arabic.exersices_arabic.Lateral_raise.lateral_raise_arabic">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="70dp"
+            tools:ignore="WebViewLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lateral Raises"
+                android:textStyle="bold"
+                android:textSize="30dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/gifWebView"
+                android:layout_gravity="center"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_color"
+                android:text="بدء التمرين"
+                android:id="@+id/lateral_raises_camera"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="فوائد Lateral Raises"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lateral Raises يساهم في نحت الكتفين والذراعين العلويين، مما يوفر مظهرًا مستديرًا جميلًا. وبالإضافة إلى تحسين المظهر، تزيد هذه التمارين من حركة الكتف، وتوسع نطاق الحركة، وتعزز الاستقرار."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="التحسينات في وظائف الكتف مفيدة لأداء مختلف الرفعات والضغوط بشكل أكثر فعالية. بالإضافة إلى ذلك، الطبيعة الأحادية لLateral Raises تسمح بالتدريب المستهدف لكل جانب من الكتفين، مما يمكن من تحديد وتصحيح العضلات المعرضة للاختلال بين الجانبين الأيمن والأيسر من خلال التمارين المركزة."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="كيفية أداء Lateral Raises بشكل صحيح؟"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1- ابدأ من وضعية الوقوف مع دمبلز (أو جهاز آخر) في قبضتك المغلقة. يجب أن تكون إبهاماتك حول المقابض مع توجه كفيك نحو جسمك. ضع الدمبلز بجانب فخذيك مع إلتواء الكوعين قليلًا. يجب أن تكون قدميك في وضع عرض الورك أو في وضعية الانقسام."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2- ضيق جسمك لتثبيت نفسك، اسحب كتفيك لأسفل وللخلف، وحافظ على هذا الموقف طوال التمرين. يجب أن يكون رأسك متماشيًا بشكل مستقيم مع عمودك الفقري."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3- اخرج الزفير ببطء أثناء رفع الدمبلز لأعلى وجانبيًا. يجب أن ترتفع الكوعين والجزء العلوي من ذراعك معًا وينطلقوا قليلًا قبل جزء سفلي من ذراعك والدمبلز."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4- بمجرد وصول ذراعيك إلى مستوى الكتف، قم بتدويرهما قليلًا لأعلى بحيث تكون حافة الأمامية للدمبلز الآن موجهة قليلاً لأعلى. استمر في رفع الأوزان حتى تكون الكتفين والذراعين متساويين وموازيين للأرض. تأكد من تثبيت نواة جسمك بحيث لا يتعرج ظهرك السفلي وأن وضعية معصمك مريحة حتى لا تتمدد أو تصاب معصميك."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5- استنشق وقم بخفض الدمبلز ببطء إلى وضعك الابتدائي. يجب أن تكون الكوعين ممتدة قليلاً، ويجب ألا تتغير أوضاع قدميك، ونواة جسمك، وكتفيك، ومعصميك أثناء تحرير الأوزان وتدويرها مرة أخرى إلى حيث بدأت."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="100dp"
+                android:padding="10dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

@@ -36,6 +36,8 @@ android {
     packagingOptions{
         exclude ("META-INF/NOTICE.md")
         exclude ("META-INF/LICENSE.md")
+        exclude ("META-INF/INDEX.LIST")
+        exclude ("META-INF/DEPENDENCIES")
     }
 }
 
@@ -65,5 +67,7 @@ dependencies {
     implementation ("com.sun.mail:android-activation:1.6.7")
 
     implementation ("com.google.mlkit:pose-detection:18.0.0-beta3")
+
+    implementation ("com.google.mlkit:translate:17.0.2")
 
 }

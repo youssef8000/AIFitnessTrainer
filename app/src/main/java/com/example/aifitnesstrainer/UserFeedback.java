@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.core.content.ContextCompat;
@@ -42,9 +43,6 @@ public class UserFeedback extends Fragment {
         DatabaseHelper databaseHelper = new DatabaseHelper(requireContext());
         SharedPreferences preferences = requireContext().getSharedPreferences("user_info", Context.MODE_PRIVATE);
         String userEmail = preferences.getString("user_email", "");
-        TextView trainer_name = view.findViewById(R.id.trainer_name);
-        User user = databaseHelper.getUserByEmail(userEmail);
-        trainer_name.setText("Hello,"+user.getname());
         Cursor cursor = databaseHelper.getAllFeedbackByEmail(userEmail);
         TableLayout tableLayout = view.findViewById(R.id.table);
         if (cursor.moveToFirst()) {
@@ -53,21 +51,21 @@ public class UserFeedback extends Fragment {
 
                 TextView textView1 = new TextView(requireContext());
                 textView1.setText(cursor.getString(cursor.getColumnIndex("ex_name")));
-                textView1.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+                textView1.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 textView1.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
                 TextView textView2 = new TextView(requireContext());
                 textView2.setText(String.valueOf(cursor.getInt(cursor.getColumnIndex("goal"))));
-                textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+                textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 textView2.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
                 TextView textView3 = new TextView(requireContext());
                 double accuracy = cursor.getDouble(cursor.getColumnIndex("accuracy"));
                 textView3.setText(String.format("%.2f%%", accuracy * 100));
-                textView3.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
+                textView3.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
                 textView3.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
 
-                Button button = new Button(requireContext());
+                TextView button = new Button(requireContext());
                 button.setText("See Feedback");
                 int feedbackId = cursor.getInt(cursor.getColumnIndex("id"));
                 button.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +75,8 @@ public class UserFeedback extends Fragment {
                     }
                 });
                 button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                button.setTextColor(Color.BLACK);
+                button.setBackgroundColor(Color.parseColor("#2ffc2b"));
 
                 row.addView(textView1);
                 row.addView(textView2);
@@ -86,7 +86,7 @@ public class UserFeedback extends Fragment {
                 tableLayout.addView(row);
                 View line = new View(requireContext());
                 line.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2));
-                line.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.black));
+                line.setBackgroundColor(ContextCompat.getColor(requireContext(), android.R.color.white));
                 tableLayout.addView(line);
             } while (cursor.moveToNext());
         }

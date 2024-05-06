@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".exersices.Dumbbell_Tricep.dumbbell__tricep_goal">
 
     <LinearLayout
@@ -21,7 +22,7 @@
                 android:text="Dumbbell Tricep Extension"
                 android:textStyle="bold"
                 android:textSize="30dp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
@@ -40,10 +41,11 @@
                 android:padding="8dp"
                 android:textColor="@color/black" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="200dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center"
+                android:background="@drawable/button_color"
                 android:text="Open Camera"
                 android:id="@+id/Dumbbell_Tricep_camera_start"
                 android:layout_marginTop="10dp"/>

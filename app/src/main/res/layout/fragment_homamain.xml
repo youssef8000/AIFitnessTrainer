@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".homamainFragment">
 
     <LinearLayout
@@ -19,10 +20,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome to "
+                android:id="@+id/trainer_name"
+                android:text=""
                 android:textStyle="bold"
                 android:textSize="30dp"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
@@ -32,11 +34,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
                 android:layout_gravity="center"
-                android:src="@drawable/logo_removebg" />
+                android:src="@drawable/home5" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:text="Embark on a journey to achieve your fitness goals with the power of artificial intelligence! Whether you're striving to lose weight, build muscle, or improve your overall health and fitness, our AI Fitness Trainer is here to guide and support you every step of the way."
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
@@ -51,48 +53,72 @@
             android:orientation="vertical"
             android:layout_marginBottom="70dp"
             >
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="10dp"
-                app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@color/white"
-                app:cardMaxElevation="12dp"
+                app:cardCornerRadius="10dp"
+                app:cardBackgroundColor="@color/black"
+                app:cardMaxElevation="5dp"
                 android:layout_marginTop="5dp"
                 app:cardPreventCornerOverlap="true"
                 app:cardUseCompatPadding="true">
 
-                <!-- Linear layout to contain image, text, and button -->
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="18sp"
-                        android:layout_gravity="center"
-                        android:text="Exercises"
-                        android:layout_marginBottom="10dp"
-                        android:textColor="@color/black"/>
-                    <!-- Image view -->
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:src="@drawable/workout"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="Image description"/>
-                    <!-- Text view -->
+                    android:layout_height="210dp"
+                    android:background="@drawable/cardcolor"
+                    android:padding="5dp">
 
-                    <Button
-                        android:layout_width="wrap_content"
+                    <!-- Image view on the left side -->
+                    <ImageView
+                        android:id="@+id/exercise_image"
+                        android:layout_width="190dp"
+                        android:layout_height="190dp"
+                        android:contentDescription="Image description"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginLeft="8dp"
+                        android:src="@drawable/workout"
+                        />
+
+                    <!-- Linear layout for title and button on the right side -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Show all exercises"
-                        android:layout_gravity="center"
-                        android:id="@+id/exercise"
-                        android:layout_marginTop="8dp"/>
-                </LinearLayout>
+                        android:layout_marginStart="1dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="1dp"
+                        android:layout_marginBottom="1dp"
+                        android:layout_toRightOf="@id/exercise_image"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <!-- Text view for title -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Exercises"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                        <!-- Button -->
+                        <TextView
+                            android:id="@+id/exercise"
+                            android:layout_width="150dp"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="70dp"
+                            android:background="@drawable/button_color"
+                            android:fontFamily="@font/robotoblack"
+                            android:gravity="center"
+                            android:text="View all exercise"
+                            android:textColor="@color/black" />
+                    </LinearLayout>
+
+                </RelativeLayout>
+
             </androidx.cardview.widget.CardView>
         </LinearLayout>
     </LinearLayout>

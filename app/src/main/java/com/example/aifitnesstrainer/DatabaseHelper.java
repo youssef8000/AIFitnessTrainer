@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context) {
-        super(context, "appDB.db", null, 1);
+        super(context, "FitnessDB.db", null, 1);
     }
 
     @Override
@@ -40,6 +40,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "incorrect_score INTEGER," +
                     "accuracy DECIMAL," +
                     "workoutfeedback TEXT)");
+            MyDatabase.execSQL("CREATE TABLE calories(" +
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "email TEXT," +
+                    "weight DECIMAL," +
+                    "height DECIMAL ," +
+                    "age INTEGER," +
+                    "gender TEXT," +
+                    "no_exercise TEXT," +
+                    "exercise_1_3 TEXT," +
+                    "exercise_4_5 TEXT," +
+                    "intense_exercise_3_4 TEXT," +
+                    "intense_exercise_6_7 TEXT," +
+                    "very_intense_exercise TEXT)");
 
         }catch (SQLException e) {
             e.printStackTrace();
@@ -98,7 +111,82 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         long result = MyDatabase.insert("feedback", null, contentValues);
         return result != -1;
     }
+    public boolean insertCalorieData(String email, double weight, double height, int age,
+                                     String gender, double noExercise, double exercise1_3, double exercise4_5,
+                                     double intenseExercise3_4, double intenseExercise6_7, double veryIntenseExercise) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("email", email);
+        values.put("weight", weight);
+        values.put("height", height);
+        values.put("age", age);
+        values.put("gender", gender);
+        values.put("no_exercise", noExercise);
+        values.put("exercise_1_3", exercise1_3);
+        values.put("exercise_4_5", exercise4_5);
+        values.put("intense_exercise_3_4", intenseExercise3_4);
+        values.put("intense_exercise_6_7", intenseExercise6_7);
+        values.put("very_intense_exercise", veryIntenseExercise);
 
+        long result = db.insert("calories", null, values);
+        db.close();
+
+        return result != -1;
+    }
+    public Cursor getCalorieDataByEmail(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String[] projection = {
+                "email",
+                "weight",
+                "height",
+                "age",
+                "gender",
+                "no_exercise",
+                "exercise_1_3",
+                "exercise_4_5",
+                "intense_exercise_3_4",
+                "intense_exercise_6_7",
+                "very_intense_exercise"
+        };
+
+        String selection = "email = ?";
+        String[] selectionArgs = {email};
+
+        Cursor cursor = db.query(
+                "calories",  // The table to query
+                projection,  // The array of columns to return (null to get all)
+                selection,   // The columns for the WHERE clause
+                selectionArgs,  // The values for the WHERE clause
+                null,        // don't group the rows
+                null,        // don't filter by row groups
+                null         // don't sort the rows
+        );
+
+        // Make sure to close the database after using the cursor in your activity or fragment
+        return cursor;
+    }
+    public boolean updateCalorieData(String email, double weight, double height, int age,
+                                     String gender, double noExercise, double exercise1_3, double exercise4_5,
+                                     double intenseExercise3_4, double intenseExercise6_7, double veryIntenseExercise) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("weight", weight);
+        values.put("height", height);
+        values.put("age", age);
+        values.put("gender", gender);
+        values.put("no_exercise", noExercise);
+        values.put("exercise_1_3", exercise1_3);
+        values.put("exercise_4_5", exercise4_5);
+        values.put("intense_exercise_3_4", intenseExercise3_4);
+        values.put("intense_exercise_6_7", intenseExercise6_7);
+        values.put("very_intense_exercise", veryIntenseExercise);
+
+        int rowsAffected = db.update("calories", values, "email = ?", new String[]{email});
+        db.close();
+
+        return rowsAffected > 0;
+    }
     public User getUserByEmail(String email) {
         SQLiteDatabase MyDatabase = this.getReadableDatabase();
         Cursor cursor = MyDatabase.rawQuery("SELECT * FROM users WHERE email = ?", new String[]{email});

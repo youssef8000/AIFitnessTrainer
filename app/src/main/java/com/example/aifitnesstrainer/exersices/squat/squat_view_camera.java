@@ -342,28 +342,6 @@ public class squat_view_camera extends AppCompatActivity {
                                 Toast.makeText(squat_view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                             }
                         }
-                        finish_squat.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String email = userEmail.toString();
-                                String ex_name = lastUserGoal.getname().toString();
-                                int goal = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
-                                int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
-                                int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
-                                double accuracy = (double) correctScore / (correctScore + incorrectScore);
-                                String workoutFeedback = TextUtils.join(", ", userFeedback);
-                                SendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                if (inserted) {
-                                    Toast.makeText(squat_view_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(squat_view_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-                        });
 
                         errormessage.setText("");
                         DetectMovement(roundedKneeFlexionAngle, roundedHipFlexionAngle, roundedAnkleDorsiflexionAngle,

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Calorie Calculator</string>
+    <string name="col1">Actvity Level</string>
+    <string name="col2">Calori</string>
+    <string name="level_prompt" />
+    <string name="weight_prompt" />
+    <string name="height_prompt" />
+    <string name="age_prompt" />
+    <string name="calculate" />
+    <string name="reset" />
+</resources>

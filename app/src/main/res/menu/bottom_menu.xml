@@ -11,9 +11,6 @@
         android:icon="@drawable/trainer" />
 
 
-<!--    <item-->
-<!--        android:title="" />-->
-
     <item
         android:id="@+id/profile"
         android:title="My profile"

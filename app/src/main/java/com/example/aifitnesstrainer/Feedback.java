@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.aifitnesstrainer.arabic.MainActivity_arabic;
 import com.example.aifitnesstrainer.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,8 +25,9 @@ public class Feedback extends AppCompatActivity {
     private ImageButton logoutbtn;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
+    ImageView arabic;
+
     private BottomNavigationView bottomNavigationView;
-//    FloatingActionButton homebutton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +35,9 @@ public class Feedback extends AppCompatActivity {
         logoutbtn = findViewById(R.id.btn_logout);
         toolbar = findViewById(R.id.toolbar_nav);
         bottomNavigationView = findViewById(R.id.bottom_nav);
+        arabic =findViewById(R.id.btn_arabic);
         setSupportActionBar(toolbar);
         bottomNavigationView.setBackground(null);
-//        homebutton= findViewById(R.id.fab);
         fragmentManager = getSupportFragmentManager();
         logoutbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,12 +49,14 @@ public class Feedback extends AppCompatActivity {
                 finish();
             }
         });
-//        homebutton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                openFragment(new homamainFragment());
-//            }
-//        });
+        arabic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Feedback.this, MainActivity_arabic.class);
+                startActivity(intent);
+            }
+        });
+
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -61,7 +67,11 @@ public class Feedback extends AppCompatActivity {
                 } else if (itemId == R.id.category) {
                     openFragment(new exercises());
                     return true;
-                } else if (itemId == R.id.profile) {
+                }else if (itemId == R.id.profile) {
+                    openFragment(new userProfile());
+                    return true;
+                }
+                else if (itemId == R.id.my_feedback) {
                     openFragment(new UserFeedback());
                     return true;
                 }

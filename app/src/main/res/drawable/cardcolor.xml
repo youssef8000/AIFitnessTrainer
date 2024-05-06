@@ -1,0 +1,10 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Black background for the CardView -->
+    <solid android:color="@color/black" />
+    <!-- Red border around the CardView -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/bg" /> <!-- Adjust the width and color as needed -->
+    <corners android:radius="20dp" /> <!-- CardView corner radius -->
+</shape>

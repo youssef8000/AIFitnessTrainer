@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".arabic.exersices_arabic.ShoulderPress.shoulderPress_exercise_arabic">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="70dp"
+            tools:ignore="WebViewLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shoulder Press"
+                android:textStyle="bold"
+                android:textSize="30dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/giflungeView"
+                android:layout_gravity="center"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_color"
+                android:text="بدء التمرين"
+                android:id="@+id/lunge_camera"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="فوائد Shoulder Press"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="تستهدف تمارين Shoulder press بشكل أساسي عضلات الكتف، والتي تعمل على حركة الكتف واستقراره. تشمل الفوائد زيادة قوة الكتف، وتحسين استقرار الجزء العلوي من الجسم، وتحسين الوضعية، وربما تقليل مخاطر الإصابات في الكتف. بالإضافة إلى ذلك، يمكن أن تشمل تمارين Shoulder press أيضًا تشغيل عضلات الجزء العلوي من الجسم الأخرى مثل عضلات الترايسبس والصدر العلوي، مما يؤدي إلى زيادة قوة الجزء العلوي من الجسم وتطوير العضلات بشكل عام."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="كيفية القيام بShoulder press بشكل صحيح؟"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1- ابدأ بالجلوس أو الوقوف بظهر مستقيم، مع مسك دمبل في كل يد على ارتفاع الكتف، والكفوف تواجه الأمام."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2- قم بشد عضلات الجذع للحصول على استقرار."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3- قم بزفير الهواء ودفع الدمبل لأعلى حتى تكون ذراعيك ممدودة تمامًا فوق الرأس، ولكن لا تقفل الكوعين تمامًا."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4- ابتصاص الهواء وخفض الدمبل ببطء مرة أخرى إلى مستوى الكتف."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="100dp"
+                android:padding="10dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

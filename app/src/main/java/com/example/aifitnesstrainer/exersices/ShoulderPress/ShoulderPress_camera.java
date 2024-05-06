@@ -390,7 +390,7 @@ public class ShoulderPress_camera extends AppCompatActivity {
                             int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
                             double accuracy = (double) correctScore / (correctScore + incorrectScore);
                             String workoutFeedback = TextUtils.join(", ", userFeedback);
-//                                sendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
+                                sendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
                             boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
                             if (inserted) {
                                 Toast.makeText(ShoulderPress_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
@@ -406,29 +406,6 @@ public class ShoulderPress_camera extends AppCompatActivity {
                             }
 
                         }
-                        finish_squat.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                String email = userEmail.toString();
-                                String ex_name = lastUserGoal.getname().toString();
-                                int goal = Integer.parseInt(goalEditText.getText().toString().split(" / ")[1]);
-                                int correctScore = Integer.parseInt(correct_scoree.getText().toString().split(": ")[1]);
-                                int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
-                                double accuracy = (double) correctScore / (correctScore + incorrectScore);
-                                String workoutFeedback = TextUtils.join(", ", userFeedback);
-                                sendMail(email, userName, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
-                                if (inserted) {
-                                    Toast.makeText(ShoulderPress_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(ShoulderPress_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-                        });
-
                         errormessage.setText("");
 
                         // Update ElbowLeft Message

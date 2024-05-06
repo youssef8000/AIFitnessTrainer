@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_ar"
+        android:title="الرئيسبه"
+        android:icon="@drawable/home" />
+
+    <item
+        android:id="@+id/category_ar"
+        android:title="التمارين"
+        android:icon="@drawable/trainer" />
+
+
+    <!--    <item-->
+    <!--        android:title="" />-->
+
+    <item
+        android:id="@+id/profile_ar"
+        android:title="حسابى"
+        android:icon="@drawable/ic_camera" />
+
+    <item
+        android:id="@+id/my_feedback_ar"
+        android:title="التعليقات"
+        android:icon="@drawable/feedback" />
+
+</menu>

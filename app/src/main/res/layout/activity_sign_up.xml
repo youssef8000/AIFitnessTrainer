@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/Grey"
+    android:background="@color/black"
     tools:context=".SignUp">
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,18 +14,18 @@
         android:orientation="vertical">
         <ImageView
             android:layout_width="274dp"
-            android:layout_height="312dp"
+            android:layout_height="130dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/logo_removebg"
             android:layout_marginLeft="70dp"
             />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SignUp"
+            android:fontFamily="@font/robotoblack"
             android:layout_gravity="center"
             android:textSize="50sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/white"/>
 
 
         <LinearLayout
@@ -40,7 +40,7 @@
                 android:text="Name"
                 android:layout_marginTop="0dp"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
             <EditText
                 android:id="@+id/signup_name"
                 android:layout_width="350dp"
@@ -49,14 +49,16 @@
                 android:drawablePadding="8dp"
                 android:hint="Enter your Name"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:layout_marginBottom="10dp"
+
+                android:textColor="@color/white" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
                 android:layout_marginTop="20dp"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
             <EditText
                 android:id="@+id/signup_email"
                 android:layout_width="350dp"
@@ -65,14 +67,16 @@
                 android:drawablePadding="8dp"
                 android:hint="Email"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Phone number"
                 android:textSize="20sp"
                 android:layout_marginTop="20dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
             <EditText
                 android:id="@+id/signup_phone"
                 android:layout_width="350dp"
@@ -82,14 +86,16 @@
                 android:hint="mobile no."
                 android:inputType="number"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="BirthDate"
                 android:layout_marginTop="20dp"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
             <EditText
                 android:id="@+id/signup_date"
                 android:layout_width="350dp"
@@ -102,7 +108,9 @@
                 android:focusableInTouchMode="false"
                 android:hint="Pick your birthday date"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -110,7 +118,7 @@
                 android:text="Password"
                 android:textSize="20sp"
                 android:layout_marginTop="20dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
             <EditText
                 android:id="@+id/signup_password"
                 android:layout_width="350dp"
@@ -120,14 +128,16 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Confirm Password"
                 android:layout_marginTop="20dp"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/white"/>
             <EditText
                 android:id="@+id/signup_confirm"
                 android:layout_width="350dp"
@@ -137,16 +147,25 @@
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/white"
+                android:layout_marginBottom="10dp"
+                />
 
-            <Button
+            <TextView
                 android:id="@+id/signup_button"
                 android:layout_width="350dp"
                 android:layout_height="70dp"
                 android:layout_marginTop="30dp"
                 android:text="Sign Up"
                 android:textSize="20sp"
-                app:cornerRadius="30dp" />
+                app:cornerRadius="30dp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:fontFamily="@font/robotoblack"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:background="@drawable/button_color"
+                android:layout_marginBottom="20dp"/>
 
             <TextView
                 android:id="@+id/loginRedirectText"
@@ -156,7 +175,7 @@
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
                 android:text="Already an user? Login"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
