@@ -45,13 +45,13 @@
                 android:id="@+id/signup_name"
                 android:layout_width="350dp"
                 android:layout_height="60dp"
+                android:textColor="@color/black"
                 android:background="@drawable/lavender_border"
                 android:drawablePadding="8dp"
                 android:hint="Enter your Name"
                 android:padding="8dp"
                 android:layout_marginBottom="10dp"
-
-                android:textColor="@color/white" />
+                />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 android:drawablePadding="8dp"
                 android:hint="Email"
                 android:padding="8dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginBottom="10dp"
                 />
             <TextView
@@ -86,7 +86,7 @@
                 android:hint="mobile no."
                 android:inputType="number"
                 android:padding="8dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginBottom="10dp"
                 />
             <TextView
@@ -108,7 +108,6 @@
                 android:focusableInTouchMode="false"
                 android:hint="Pick your birthday date"
                 android:padding="8dp"
-                android:textColor="@color/white"
                 android:layout_marginBottom="10dp"
                 />
 
@@ -128,7 +127,7 @@
                 android:hint="Password"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginBottom="10dp"
                 />
             <TextView
@@ -147,7 +146,7 @@
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
                 android:padding="8dp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:layout_marginBottom="10dp"
                 />
 

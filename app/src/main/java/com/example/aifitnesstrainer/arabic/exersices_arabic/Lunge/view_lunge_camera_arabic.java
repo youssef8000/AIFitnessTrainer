@@ -1,4 +1,4 @@
-package com.example.aifitnesstrainer.exersices.Lunge;
+package com.example.aifitnesstrainer.arabic.exersices_arabic.Lunge;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +13,7 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.LifecycleOwner;
-import android.graphics.PointF;
+
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -26,6 +26,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PointF;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -38,12 +40,16 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.aifitnesstrainer.DatabaseHelper;
 import com.example.aifitnesstrainer.Display;
 import com.example.aifitnesstrainer.Feedback;
 import com.example.aifitnesstrainer.JavaMailAPI;
 import com.example.aifitnesstrainer.R;
 import com.example.aifitnesstrainer.User;
+import com.example.aifitnesstrainer.arabic.Feedback_arabic;
+import com.example.aifitnesstrainer.arabic.exersices_arabic.Dumbbell_Tricep.dumbbell__tricep_camera_arabic;
+import com.example.aifitnesstrainer.exersices.Lunge.view_lunge_camera;
 import com.example.aifitnesstrainer.user_goal;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -54,6 +60,7 @@ import com.google.mlkit.vision.pose.PoseDetection;
 import com.google.mlkit.vision.pose.PoseDetector;
 import com.google.mlkit.vision.pose.PoseLandmark;
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions;
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +68,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
-public class view_lunge_camera extends AppCompatActivity {
+public class view_lunge_camera_arabic extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     Button finish_squat;
     int PERMISSION_REQUESTS = 1;
@@ -88,6 +95,7 @@ public class view_lunge_camera extends AppCompatActivity {
     List<Integer> seqState = new ArrayList<>();
     List<Integer> seqStateLeft = new ArrayList<>();
     List<String> userFeedback = new ArrayList<>();
+    List<String> userFeedback_arabic = new ArrayList<>();
     TextToSpeech speak;
     boolean feedbackSpoken = false;
     boolean complete_exercise = false;
@@ -101,11 +109,12 @@ public class view_lunge_camera extends AppCompatActivity {
     int left_current_score=0;
     int left_incorrect_score=0;
     int left_correct_score=0;
+    MediaPlayer player;
     @ExperimentalGetImage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_lunge_camera);
+        setContentView(R.layout.activity_view_lunge_camera_arabic);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         previewView = findViewById(R.id.preview);
         display = findViewById(R.id.display);
@@ -149,7 +158,8 @@ public class view_lunge_camera extends AppCompatActivity {
             }
             public void onFinish() {
                 timer.setVisibility(View.INVISIBLE);
-                speak.speak("Let's start training",TextToSpeech.QUEUE_FLUSH,null);
+                player= MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.start_training);
+                player.start() ;
                 cameraProviderFuture.addListener(() -> {
                     try {
                         ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
@@ -294,7 +304,7 @@ public class view_lunge_camera extends AppCompatActivity {
                         int smallestKneeAngle = !kneeAngles.isEmpty() ? kneeAngles.get(0) : 0;
 
                         float[] hiplCoord = { hipl.getPosition().x, hipl.getPosition().y };
-                         float[] kneelCoord = { kneel.getPosition().x, kneel.getPosition().y };
+                        float[] kneelCoord = { kneel.getPosition().x, kneel.getPosition().y };
                         float[] anklelCoord = { anklel.getPosition().x, anklel.getPosition().y };
                         float[] shoulderlCoord = { shoulderl.getPosition().x, shoulderl.getPosition().y };
 
@@ -316,21 +326,32 @@ public class view_lunge_camera extends AppCompatActivity {
                         }
                         Collections.sort(seqStateLeft, Collections.reverseOrder());
                         CountRepetitions(smallestKneeAngle,smallestKneelAngle, current_state,current_state_Left, complete_exercise);
+//                        float[] noseCoord = { poseArrayList.get(0).getPoseLandmark(PoseLandmark.NOSE).getPosition().x,
+//                                poseArrayList.get(0).getPoseLandmark(PoseLandmark.NOSE).getPosition().y };
+//                        double nose_angle=CalculateAngle(shoulderlCoord,shoulderrCoord,noseCoord);
+//                        int nosey = (int) Math.round(nose_angle);
+//                        EditText nosemessage=findViewById(R.id.errornose);
+//                        if (nosey>50)
+//                        {
+//                            nosemessage.setText("The camera is not aligned correctly, please stand to the right side of the camera.");
+//                        }else {
+//                            nosemessage.setText("");
+//                        }
 
-                        goalEditText.setText("Goal: "+current_score+" / "+goal);
+                        goalEditText.setText("هدفك: "+current_score+" / "+goal);
 
-                        goalright.setText("Right Goal: "+right_current_score+" / "+goal);
-                        rightcorrect_scoree.setText("Correct: "+right_correct_score);
-                        rightincorrect_scoree.setText("InCorrect: "+right_incorrect_score);
+                        goalright.setText("الهدف للقدم اليمنى: " + right_current_score + " / " + goal);
+                        rightcorrect_scoree.setText("الأعداد الصحيحه: "+right_correct_score);
+                        rightincorrect_scoree.setText("الأعداد الخاطئه: "+right_incorrect_score);
 
-                        goalleft.setText("Left Goal: "+left_current_score+" / "+goal);
-                        leftcorrect_scoree.setText("Correct: "+left_correct_score);
-                        leftincorrect_scoree.setText("InCorrect: "+left_incorrect_score);
-
+                        goalleft.setText("الهدف للقدم اليسرى: "+left_current_score+" / "+goal);
+                        leftcorrect_scoree.setText("الأعداد الصحيحه: "+left_correct_score);
+                        leftincorrect_scoree.setText("الأعداد الخاطئه: "+left_incorrect_score);
 
 
                         if(current_score==goal && !feedbackSpoken){
-                            speak.speak("You finish your exercise please press the button to see feedback about your moves",TextToSpeech.QUEUE_ADD,null);
+                            player=MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.check_feedback);
+                            player.start();
                             feedbackSpoken = true;
                             complete_exercise=true;
                             String email = userEmail.toString();
@@ -344,30 +365,37 @@ public class view_lunge_camera extends AppCompatActivity {
                             int incorrectScore = (rightincorrectScore+leftincorrectScore)/2;
                             double accuracy = (double) correctScore / (correctScore + incorrectScore);
                             String workoutFeedback = TextUtils.join(", ", userFeedback);
+                            String workoutFeedback_arabic = TextUtils.join(", ", userFeedback_arabic);
                             SendMail(email, userName, ex_name, goal_ex,
-                                    rightcorrectScore, leftcorrectScore,rightincorrectScore, leftincorrectScore,accuracy, workoutFeedback);
+                                    rightcorrectScore, leftcorrectScore,rightincorrectScore, leftincorrectScore,accuracy, workoutFeedback_arabic);
                             boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal_ex, correctScore, incorrectScore, accuracy, workoutFeedback);
                             if (inserted) {
-                                Toast.makeText(view_lunge_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(view_lunge_camera_arabic.this, "تستطيع أن ترى ملاحظتنا على التمرين.", Toast.LENGTH_SHORT).show();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Intent intent = new Intent(getApplicationContext(), Feedback.class);
+                                        Intent intent = new Intent(getApplicationContext(), Feedback_arabic.class);
                                         startActivity(intent);
                                     }
                                 }, 2000); // 2000 milliseconds = 2 seconds delay
                             } else {
-                                Toast.makeText(view_lunge_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(view_lunge_camera_arabic.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                             }
                         }
 
                         errormessage.setText("");
+//                        EditText Kneangle = findViewById(R.id.kneeangle);
+//                        Kneangle.setText(rightcounted+"right Knee: "+smallestKneeAngle+" / "+roundedKneeFlexionAngle
+//                                +" / "+current_state
+//                                +" / "+seqState.get(0));
+//                        EditText hipangle = findViewById(R.id.hipangle);
+//                        hipangle.setText(leftcounted+"left Knee: "+smallestKneelAngle+" /: "+roundedKneel);
 
                         DetectMovement(roundedKneeFlexionAngle,roundedKneel,hipr, kneer, hipl, kneel,
                                 ErrorKneeMessage, ErrorHipMessage);
 
                     } else {
-                        errormessage.setText("Some landmarks are missing for Lunge detection");
+                        errormessage.setText("بعض العلامات البارزة مفقودة لاكتشاف Lunge");
                     }
 
                     bitmap4DisplayArrayList.clear();
@@ -393,18 +421,18 @@ public class view_lunge_camera extends AppCompatActivity {
     private void SendMail(String email, String userName,String ex_name, int goal,
                           int rightcorrectScore,int leftcorrectScore,int rightincorrectScore,int leftincorrectScore,
                           double accuracy, String workoutFeedback) {
-        String subject = "Feedback about your training for this exercise" + ex_name;
-        String message = "Dear, " + userName
-                + "\nYou've finished your workout and here are our training notes for this workout"
-                + "\nExercise Name: " + ex_name
-                + "\nYour Goal: " + goal
-                + "\nYour Correct repetition at right leg: " + rightcorrectScore
-                + "\nYour Incorrect repetition at right leg: " + rightincorrectScore
-                + "\nYour Correct repetition at left leg: " + leftcorrectScore
-                + "\nYour Incorrect repetition at left leg: " + leftincorrectScore
-                + "\nOur Feedback: " + workoutFeedback
-                + "\nYour Accuracy: " + (accuracy*100)+"%"
-                + "\nKeep going and do your best.";
+        String subject = "تعليقات حول تدريبك لهذا التمرين" + ex_name;
+        String message = "عزيزي/عزيزتي، " + userName
+                + "\nلقد أنهيت تمرينك وهنا ملاحظاتنا التدريبية لهذا التمرين"
+                + "\nاسم التمرين: " + ex_name
+                + "\nهدفك: " + goal
+                + "\nالتكرار الصحيح في الساق اليمنى: " + rightcorrectScore
+                + "\nالتكرار غير الصحيح في الساق اليمنى: " + rightincorrectScore
+                + "\nالتكرار الصحيح في الساق اليسرى: " + leftcorrectScore
+                + "\nالتكرار غير الصحيح في الساق اليسرى: " + leftincorrectScore
+                + "\nملاحظاتنا: " + workoutFeedback
+                + "\nدقتك: " + (accuracy*100) + "%"
+                + "\nاستمر في التقدم وبذل قصارى جهدك.";
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, email, subject, message);
         javaMailAPI.execute();
     }
@@ -434,22 +462,22 @@ public class view_lunge_camera extends AppCompatActivity {
                                 PoseLandmark hipr, PoseLandmark kneer, PoseLandmark hipl, PoseLandmark kneel,
                                 EditText ErrorKneeMessage, EditText ErrorleftkneeMessage) {
         // Update Knee Message
-        if (roundedKneeFlexionAngle < 75) {
-            ErrorKneeMessage.setText("right knee angle is too deep");
+        if (roundedKneeFlexionAngle < 70) {
+            ErrorKneeMessage.setText("زاوية الركبة اليمنى عميقة جدًا");
             drawErrorLineBetweenLandmarks(hipr, kneer);
         } else if (roundedKneeFlexionAngle > 120 && roundedKneeFlexionAngle < 160) {
-            ErrorKneeMessage.setText("Lower Your Hip");
+            ErrorKneeMessage.setText("اخفض وركك");
             drawErrorLineBetweenLandmarks(hipr, kneer);
         } else {
             ErrorKneeMessage.setText("");
             drawLineBetweenLandmarks(hipr, kneer);
         }
         // Update Knee Message
-        if (roundedKneel < 75) {
-            ErrorleftkneeMessage.setText("left knee angle is too deep");
+        if (roundedKneel < 70) {
+            ErrorleftkneeMessage.setText("زاوية الركبة اليسرى عميقة جدًا");
             drawErrorLineBetweenLandmarks(hipl, kneel);
         } else if (roundedKneel > 120 && roundedKneel < 160 ) {
-            ErrorleftkneeMessage.setText("Lower Your Hip");
+            ErrorleftkneeMessage.setText("اخفض وركك");
             drawErrorLineBetweenLandmarks(hipl, kneel);
         } else {
             ErrorleftkneeMessage.setText("");
@@ -467,7 +495,10 @@ public class view_lunge_camera extends AppCompatActivity {
             if (smallestKneeAngle < 75 && rightcounted) {
                 right_incorrect_score++;
                 userFeedback.add("Your right knee angle is too deep.");
-                speak.speak("This is an incorrect move because your right knee angle is too deep", TextToSpeech.QUEUE_FLUSH, null);
+                userFeedback_arabic.add("زاوية ركبتك اليمنى عميقة جدًا.");
+
+                player=MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.incorrect_move);
+                player.start();
                 right_current_score++;
                 rightcounted=false;
                 leftcounted = true;
@@ -476,14 +507,18 @@ public class view_lunge_camera extends AppCompatActivity {
             } else if (smallestKneeAngle < 130 && smallestKneeAngle > 120 && rightcounted) {
                 right_incorrect_score++;
                 userFeedback.add("Lower your hip to correct the right knee angle.");
-                speak.speak("This is an incorrect move because Lower your hip to correct the right knee angle", TextToSpeech.QUEUE_FLUSH, null);
+                userFeedback_arabic.add("اخفض وركك لتصحيح زاوية الركبة اليمنى.");
+
+                player=MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.incorrect_move);
+                player.start();
                 right_current_score++;
                 rightcounted=false;
                 leftcounted = true;
                 counted=true;
-            } else if(smallestKneeAngle < 100 && smallestKneeAngle > 75 && rightcounted) {
+            } else if(smallestKneeAngle < 100 && smallestKneeAngle > 70 && rightcounted) {
                 right_correct_score++;
-                speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
+                player=MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.correct_move);
+                player.start();
                 right_current_score++;
                 rightcounted=false;
                 leftcounted = true;
@@ -492,7 +527,10 @@ public class view_lunge_camera extends AppCompatActivity {
                 left_incorrect_score++;
                 left_current_score++;
                 userFeedback.add("Your left knee angle is too deep.");
-                speak.speak("This is an incorrect move because your left knee angle is too deep", TextToSpeech.QUEUE_FLUSH, null);
+                userFeedback_arabic.add("زاوية ركبتك اليسرى عميقة جدًا.");
+
+                player=MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.incorrect_move);
+                player.start();
                 leftcounted = false;
                 rightcounted=true;
                 counted=true;
@@ -500,13 +538,17 @@ public class view_lunge_camera extends AppCompatActivity {
                 left_incorrect_score++;
                 left_current_score++;
                 userFeedback.add("Lower your hip to correct the left knee angle.");
-                speak.speak("This is an incorrect move because Lower your hip to correct the left knee angle", TextToSpeech.QUEUE_FLUSH, null);
+                userFeedback_arabic.add("اخفض وركك لتصحيح زاوية الركبة اليسرى.");
+
+                player=MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.incorrect_move);
+                player.start();
                 leftcounted = false;
                 rightcounted=true;
             } else if(smallestKneeLAngle < 100 && smallestKneeLAngle > 75 && leftcounted){
                 left_correct_score++;
                 left_current_score++;
-                speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
+                player=MediaPlayer.create(view_lunge_camera_arabic.this,R.raw.correct_move);
+                player.start();
                 leftcounted = false;
                 rightcounted=true;
                 counted=true;

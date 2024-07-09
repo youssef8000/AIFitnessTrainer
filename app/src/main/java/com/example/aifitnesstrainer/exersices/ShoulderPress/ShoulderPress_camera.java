@@ -302,6 +302,15 @@ public class ShoulderPress_camera extends AppCompatActivity {
                         int elbow_angleR = (int) Math.round(rightshldrwristelbowangle);
                         int elbow_angleL = (int) Math.round(leftshldrwristelbowangle);
 
+
+                        EditText errorposition=findViewById(R.id.errorposition);
+                        if (shoulderR<90 &&shoulderl<90)
+                        {
+                            errorposition.setText("Please raise your hand to make your elbow and shoulder in a straight line to take the correct position for the exercise.");
+                        }else {
+                            errorposition.setText("");
+                        }
+
                         leftShoulderAngles.add(shoulderl);
                         leftElbowAngles.add(elbow_angleL);
                         rightShoulderAngles.add(shoulderR);

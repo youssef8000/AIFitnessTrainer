@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".arabic.exersices_arabic.Lunge.lunge_exercise_arabic">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="70dp"
+            tools:ignore="WebViewLayout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lunge"
+                android:textStyle="bold"
+                android:textSize="30dp"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/giflungeView"
+                android:layout_gravity="center"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:background="@drawable/button_color"
+                android:text="بدء التمرين"
+                android:id="@+id/lunge_camera"
+                android:layout_marginTop="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="فوائد lunge"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="تمارين الاندفاع هي تمارين قوية وشائعة للجزء السفلي من الجسم. هذا الروتين الرياضي المتنوع يبني مجموعة من العضلات ويعزز صحتك العامة ولياقتك بطرق مختلفة."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="لتمارين الاندفاع فوائد صحية متعددة، بما في ذلك تحسين التوازن والتنسيق والمرونة، بالإضافة إلى زيادة القوة وتحديد العضلات. يمكن للأفراد من جميع مستويات اللياقة أداء هذه التمارين البسيطة ولكن الفعالة، ويمكن أيضًا تخصيصها لتلبية أهدافك واحتياجاتك الخاصة."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="كيف تقوم بتمرينة lunge ؟"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1- قف مواجهًا للأمام، وضع يديك على الوركين."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2- اندفع للأمام بساقك اليسرى وخفض جسمك عن طريق ثني الركبة اليمنى والورك حتى تقترب ركبتك اليمنى من الأرض. حافظ على جذعك مستقيماً طوال الوقت."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3- يجب أن تشير ركبتك الأمامية في نفس اتجاه قدمك ولا تتحرك أبعد من أصابع قدميك."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:padding="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4- عد إلى وضع البداية. كرر مع الساق الأخرى."
+                android:textSize="18dp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="100dp"
+                android:padding="10dp"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

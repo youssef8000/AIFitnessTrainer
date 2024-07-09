@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="MyDatePickerDialogStyle" parent="ThemeOverlay.MaterialComponents.Dialog">
-        <item name="android:background">@color/black</item> <!-- Set the background color to white -->
+        <item name="android:background">@color/white</item> <!-- Set the background color to white -->
         <item name="android:datePickerStyle">@style/MyDatePickerStyle</item>
     </style>
 
     <style name="MyDatePickerStyle" parent="@android:style/Widget.Material.Light.DatePicker">
-        <item name="android:textColor">@android:color/black</item> <!-- Set the text color to black -->
+        <item name="android:textColor">@android:color/white</item> <!-- Set the text color to black -->
     </style>
+
+
 </resources>

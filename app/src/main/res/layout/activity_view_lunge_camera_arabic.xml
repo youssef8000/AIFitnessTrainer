@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".exersices.ShoulderPress.ShoulderPress_camera">
+    tools:context=".arabic.exersices_arabic.Lunge.view_lunge_camera_arabic">
+
     <androidx.camera.view.PreviewView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -74,7 +75,7 @@
 
     <!-- Add EditText to display Error -->
     <EditText
-        android:id="@+id/shoulderError"
+        android:id="@+id/kneeError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -101,34 +102,6 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
-    <EditText
-        android:id="@+id/wristError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="120dp"
-        android:inputType="none"
-        android:text=""
-        android:background="@color/red"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints" />
-    <EditText
-        android:id="@+id/elbowError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="180dp"
-        android:inputType="none"
-        android:text=""
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:background="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints" />
 
     <EditText
         android:id="@+id/errorEditText"
@@ -145,7 +118,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
     <EditText
-        android:id="@+id/errorposition"
+        android:id="@+id/errornose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -207,18 +180,18 @@
             android:textSize="16sp"
             tools:ignore="MissingConstraints" />
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
+        android:layout_margin="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints">
 
         <!-- EditText to display goal -->
         <EditText
-            android:id="@+id/leftShoulder"
+            android:id="@+id/goalright"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="none"
@@ -231,41 +204,117 @@
 
         <!-- EditText to display correct score -->
         <EditText
-            android:id="@+id/leftelbow"
+            android:id="@+id/rightcorrect_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="none"
             android:text=""
             android:textStyle="bold"
-            android:background="@color/black"
+            android:background="@color/green"
             android:textColor="@color/white"
             android:textSize="16sp"
             tools:ignore="MissingConstraints" />
 
         <!-- EditText to display incorrect score -->
         <EditText
-            android:id="@+id/rightShoulder"
+            android:id="@+id/rightincorrect_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="none"
             android:text=""
             android:textStyle="bold"
-            android:background="@color/black"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            tools:ignore="MissingConstraints" />
-        <EditText
-            android:id="@+id/rightelbow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:text=""
-            android:textStyle="bold"
-            android:background="@color/black"
+            android:background="@color/red"
             android:textColor="@color/white"
             android:textSize="16sp"
             tools:ignore="MissingConstraints" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="300dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="MissingConstraints">
+
+        <!-- EditText to display goal -->
+        <EditText
+            android:id="@+id/goalleft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:text=""
+            android:textStyle="bold"
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:ignore="MissingConstraints" />
+
+        <!-- EditText to display correct score -->
+        <EditText
+            android:id="@+id/leftcorrect_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:text=""
+            android:textStyle="bold"
+            android:background="@color/green"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:ignore="MissingConstraints" />
+
+        <!-- EditText to display incorrect score -->
+        <EditText
+            android:id="@+id/leftincorrect_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:text=""
+            android:textStyle="bold"
+            android:background="@color/red"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            tools:ignore="MissingConstraints" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints">
+        <!-- EditText to display goal -->
+        <EditText
+            android:id="@+id/kneeangle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="0dp"
+            android:inputType="none"
+            android:text=""
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
+        <!-- EditText to display goal -->
+        <EditText
+            android:id="@+id/hipangle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="0dp"
+            android:inputType="none"
+            android:text=""
+            android:background="@color/black"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="MissingConstraints" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

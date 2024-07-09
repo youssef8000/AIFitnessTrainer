@@ -1,4 +1,5 @@
-package com.example.aifitnesstrainer.exersices.Dumbbell_Tricep;
+package com.example.aifitnesstrainer.arabic.exersices_arabic.Dumbbell_Tricep;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.Camera;
@@ -25,6 +26,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -44,6 +46,9 @@ import com.example.aifitnesstrainer.JavaMailAPI;
 import com.example.aifitnesstrainer.R;
 import com.example.aifitnesstrainer.User;
 import com.example.aifitnesstrainer.UserFeedback;
+import com.example.aifitnesstrainer.arabic.Feedback_arabic;
+import com.example.aifitnesstrainer.arabic.exersices_arabic.Lateral_raise.view_LateralRaise_camera_arabic;
+import com.example.aifitnesstrainer.exersices.Dumbbell_Tricep.dumbbell__tricep_camera;
 import com.example.aifitnesstrainer.exersices.Lateral_raise.view_LateralRaise_camera;
 import com.example.aifitnesstrainer.user_goal;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -57,12 +62,15 @@ import com.google.mlkit.vision.pose.PoseLandmark;
 import com.google.mlkit.vision.pose.defaults.PoseDetectorOptions;
 import org.opencv.core.Point;
 import java.nio.ByteBuffer;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
-public class dumbbell__tricep_camera extends AppCompatActivity {
+
+public class dumbbell__tricep_camera_arabic extends AppCompatActivity {
     DatabaseHelper databaseHelper;
     Button finish_letralRaise;
     int PERMISSION_REQUESTS = 1;
@@ -97,15 +105,17 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
     List<Integer> lateralRightState = new ArrayList<>();
     List<Integer> lateralLeftState = new ArrayList<>();
     List<String> userFeedback = new ArrayList<>();
+    List<String> userFeedback_arabic = new ArrayList<>();
+
     int current_score=0;
     int incorrect_score=0;
     int correct_score=0;
-
+    MediaPlayer player;
     @ExperimentalGetImage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dumbbell_tricep_camera);
+        setContentView(R.layout.activity_dumbbell_tricep_camera_arabic);
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         previewView = findViewById(R.id.preview);
         display = findViewById(R.id.display);
@@ -149,7 +159,8 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
 
             public void onFinish() {
                 timer.setVisibility(View.INVISIBLE);
-                speak.speak("Let's start training",TextToSpeech.QUEUE_FLUSH,null);
+                player= MediaPlayer.create(dumbbell__tricep_camera_arabic.this,R.raw.start_training);
+                player.start() ;
                 cameraProviderFuture.addListener(() -> {
                     try {
                         ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
@@ -279,6 +290,7 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                         drawLineBetweenLandmarks(hipr23, hipr24);
 
 //---------------------------------------------------------------------------------------------------------------
+//                      äÌíÈ ÇáÒæÇíÇ
                         Point leftHipCoord = new Point(hipr23.getPosition().x, hipr23.getPosition().y);
                         Point leftWristCoord = new Point(wristr15.getPosition().x, wristr15.getPosition().y);
                         Point leftShldrCoord = new Point(shoulderr11.getPosition().x, shoulderr11.getPosition().y);
@@ -300,14 +312,6 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                         int elbow_angleR = (int) Math.round(rightshldrwristelbowangle);
                         int elbow_angleL = (int) Math.round(leftshldrwristelbowangle);
 
-
-                        EditText errorposition=findViewById(R.id.errorposition);
-                        if (shoulderR< 100 &&shoulderl<100)
-                        {
-                            errorposition.setText("please raise your hand to take right position of exercise.");
-                        }else {
-                            errorposition.setText("");
-                        }
                         elbow_RAngles.add(elbow_angleR);
                         elbow_LAngles.add(elbow_angleL);
                         hip_shoulder_RAngles.add(shoulderR);
@@ -326,7 +330,7 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                             lateralRightState.add(current_state_Right);
                         }
                         Collections.sort(lateralRightState, Collections.reverseOrder());
-                        
+
                         if (!lateralLeftState.contains(current_state_Left)) {
                             lateralLeftState.add(current_state_Left);
                         }
@@ -344,28 +348,33 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                             if(greatestelbow_LAngle< 150 && greatestelbow_LAngle > 80 && shoulderR > 140){
                                 incorrect_score++;
                                 userFeedback.add("Your Left Elbow angle is wrong,because your Left hand is raised");
-                                speak.speak("This is an incorrect move because your Left Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
+                                userFeedback_arabic.add("زاوية كوعك الأيسر خاطئة لأن يدك اليسرى مرفوعة");
 
+                                player=MediaPlayer.create(dumbbell__tricep_camera_arabic.this,R.raw.incorrect_move);
+                                player.start();
                             } else if (greatestelbow_RAngle<150 && greatestelbow_RAngle > 80 && shoulderl > 140) {
                                 incorrect_score++;
                                 userFeedback.add("Your Right Elbow angle is wrong,because your Right hand is raised");
-                                speak.speak("This is an incorrect move because your Right Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
-
+                                userFeedback_arabic.add("زاوية كوعك الأيمن خاطئة لأن يدك اليمنى مرفوعة");
+                                player=MediaPlayer.create(dumbbell__tricep_camera_arabic.this,R.raw.incorrect_move);
+                                player.start();
                             } else if(greatestelbow_LAngle < 40 && shoulderR > 140){
                                 incorrect_score++;
                                 userFeedback.add("Your Left Elbow angle is wrong,because your Left hand is too low");
-                                speak.speak("This is an incorrect move because your Left Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
-
+                                userFeedback_arabic.add("زاوية كوعك الأيسر خاطئة لأن يدك اليسرى منخفضة جدًا");
+                                player=MediaPlayer.create(dumbbell__tricep_camera_arabic.this,R.raw.incorrect_move);
+                                player.start();
                             } else if (greatestelbow_RAngle < 40 && shoulderl > 140) {
                                 incorrect_score++;
                                 userFeedback.add("Your Right Elbow angle is wrong,because your Right hand is too low");
-                                speak.speak("This is an incorrect move because your Right Elbow angle is wrong", TextToSpeech.QUEUE_FLUSH, null);
-
+                                userFeedback_arabic.add("زاوية كوعك الأيمن خاطئة لأن يدك اليمنى منخفضة جدًا");
+                                player=MediaPlayer.create(dumbbell__tricep_camera_arabic.this,R.raw.incorrect_move);
+                                player.start();
                             }
                             else{
                                 correct_score++;
-                                speak.speak("This is a correct move", TextToSpeech.QUEUE_FLUSH, null);
-
+                                player=MediaPlayer.create(dumbbell__tricep_camera_arabic.this,R.raw.correct_move);
+                                player.start();
                             }
 
                             if (new_score >previous_score) {
@@ -381,13 +390,14 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                             }
                         }
 
-                        goalEditText.setText("Goal: "+current_score+" / "+goal);
-                        correct_scoree.setText("Correct: "+correct_score);
-                        incorrect_scoree.setText("InCorrect: "+incorrect_score);
+                        goalEditText.setText("هدفك: "+current_score+" / "+goal);
+                        correct_scoree.setText("الأعداد الصحيحه: "+correct_score);
+                        incorrect_scoree.setText("الأعداد الخاطئه: "+incorrect_score);
 
                         if(current_score==goal && !feedbackSpoken){
-//                            finish_letralRaise.setVisibility(View.VISIBLE);
-                            speak.speak("You finish your exercise please check our feedback",TextToSpeech.QUEUE_ADD,null);
+
+                            player=MediaPlayer.create(dumbbell__tricep_camera_arabic.this,R.raw.check_feedback);
+                            player.start();
                             feedbackSpoken = true;
                             complete_exercise=true;
                             String email = userEmail.toString();
@@ -397,19 +407,20 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                             int incorrectScore = Integer.parseInt(incorrect_scoree.getText().toString().split(": ")[1]);
                             double accuracy = (double) correctScore / (correctScore + incorrectScore);
                             String workoutFeedback = TextUtils.join(", ", userFeedback);
-                            SendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
+                            String workoutFeedback_arabic = TextUtils.join(", ", userFeedback_arabic);
+                            SendMail(email, userName, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback_arabic);
                             boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goall, correctScore, incorrectScore, accuracy, workoutFeedback);
                             if (inserted) {
-                                Toast.makeText(dumbbell__tricep_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(dumbbell__tricep_camera_arabic.this, "تستطيع أن ترى ملاحظتنا على التمرين.", Toast.LENGTH_SHORT).show();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Intent intent = new Intent(getApplicationContext(), Feedback.class);
+                                        Intent intent = new Intent(getApplicationContext(), Feedback_arabic.class);
                                         startActivity(intent);
                                     }
                                 }, 2000); // 2000 milliseconds = 2 seconds delay
                             } else {
-                                Toast.makeText(dumbbell__tricep_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(dumbbell__tricep_camera_arabic.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                             }
                         }
                         finish_letralRaise.setOnClickListener(new View.OnClickListener() {
@@ -424,11 +435,11 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                                 String workoutFeedback = TextUtils.join(", ", userFeedback);
                                 boolean inserted = databaseHelper.insertuserfeedback(email, ex_name, goal, correctScore, incorrectScore, accuracy, workoutFeedback);
                                 if (inserted) {
-                                    Toast.makeText(dumbbell__tricep_camera.this, "you can see feedback on the exercise.", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(), Feedback.class);
+                                    Toast.makeText(dumbbell__tricep_camera_arabic.this, "تستطيع أن ترى ملاحظتنا على التمرين.", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), Feedback_arabic.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(dumbbell__tricep_camera.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(dumbbell__tricep_camera_arabic.this, "Failed Inserted", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -436,10 +447,10 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                         errormessage.setText("");
 
                         if(elbow_angleR < 40){
-                            ErrorElbowMessage.setText("make your Left hand up");
+                            ErrorElbowMessage.setText("ارفع يدك اليسرى");
                             drawErrorLineBetweenLandmarks(elbowr14, wristr16);
                         } else if (elbow_angleR <150 && elbow_angleR > 80) {
-                            ErrorElbowMessage.setText("make your Left hand down");
+                            ErrorElbowMessage.setText("اخفض يدك اليسرى");
                             drawErrorLineBetweenLandmarks(elbowr14, wristr16);
                         } else {
                             drawLineBetweenLandmarks(elbowr14, wristr16);
@@ -447,18 +458,18 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
                         }
 
                         if (elbow_angleL < 40) {
-                            ErrorHipMessage.setText("make your Right hand in up");
+                            ErrorHipMessage.setText("ارفع يدك اليمنى");
                             drawErrorLineBetweenLandmarks(elbowr13, wristr15);
                         }else if (elbow_angleL <150 && elbow_angleL > 80) {
-                            ErrorHipMessage.setText("make your Right hand down");
+                            ErrorHipMessage.setText("اخفض يدك اليمنى");
                             drawErrorLineBetweenLandmarks(elbowr13, wristr15);
                         } else {
-                            drawLineBetweenLandmarks(elbowr13, wristr15);;
+                            drawLineBetweenLandmarks(elbowr13, wristr15);
                             ErrorHipMessage.setText("");
                         }
 
                     } else {
-                        errormessage.setText("Some landmarks are missing for Dumbbell Tricep detection");
+                        errormessage.setText("بعض العلامات البارزة مفقودة لاكتشاف Dumbbell Tricep");
                     }
 
                     bitmap4DisplayArrayList.clear();
@@ -483,16 +494,18 @@ public class dumbbell__tricep_camera extends AppCompatActivity {
         Camera camera = cameraProvider.bindToLifecycle((LifecycleOwner)this, cameraSelector, imageAnalysis, preview);
     }
     private void SendMail(String email, String userName,String ex_name, int goal, int correctScore, int incorrectScore, double accuracy, String workoutFeedback) {
-        String subject = "Feedback about your training for this exercise";
-        String message = "Dear, " + userName
-                + "\nYou've finished your workout and here are our training notes for this workout"
-                + "\nExercise Name: " + ex_name
-                + "\nYour Goal: " + goal
-                + "\nYour Correct repetition: " + correctScore
-                + "\nYour Incorrect repetition: " + incorrectScore
-                + "\nOur Feedback: " + workoutFeedback
-                + "\nYour Accuracy: " + (accuracy*100)+"%"
-                + "\nKeep going and do your best.";
+        String subject = "ملاحظاتنا حول تدريبك لهذا التمرين";
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.forLanguageTag("ar"));
+        DecimalFormat df = new DecimalFormat("#.#", symbols);
+        String message = "عزيزي " + userName
+                + "\nلقد انتهيت من تمرينك وهذه ملاحظاتنا حول التدريب"
+                + "\nاسم التمرين: " + ex_name
+                + "\nهدفك: " + goal
+                + "\nعدد التكرارات الصحيحة: " + correctScore
+                + "\nعدد التكرارات الخاطئة: " + incorrectScore
+                + "\nملاحظاتنا: " + workoutFeedback
+                + "\nدقتك: " + df.format(accuracy*100) + "%"
+                + "\nاستمر وحافظ على أدائك الجيد.";
         JavaMailAPI javaMailAPI = new JavaMailAPI(this, email, subject, message);
         javaMailAPI.execute();
     }

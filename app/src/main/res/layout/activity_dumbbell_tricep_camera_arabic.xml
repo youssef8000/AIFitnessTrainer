@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".exersices.ShoulderPress.ShoulderPress_camera">
+    tools:context=".arabic.exersices_arabic.Dumbbell_Tricep.dumbbell__tricep_camera_arabic">
+
     <androidx.camera.view.PreviewView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,7 +31,6 @@
             android:layout_marginTop="250dp"
             android:layout_marginRight="35dp"
             tools:ignore="MissingConstraints">
-
 
             <!-- Circular progress bar -->
             <ProgressBar
@@ -71,10 +71,65 @@
             android:visibility="invisible"
             />
     </LinearLayout>
+    <!-- Add EditText to display angle -->
+    <EditText
+        android:id="@+id/anglehip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="bottom|end"
+        android:inputType="none"
+        android:text=""
+        android:background="@color/black"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+    <EditText
+        android:id="@+id/angleshoulder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="40dp"
+        android:inputType="none"
+        android:text=""
+        android:background="@color/black"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
+    <EditText
+        android:id="@+id/angleshoulderL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:inputType="none"
+        android:text=""
+        android:background="@color/black"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
+    <EditText
+        android:id="@+id/angleankle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:inputType="none"
+        android:text=""
+        android:background="@color/black"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints" />
 
     <!-- Add EditText to display Error -->
     <EditText
-        android:id="@+id/shoulderError"
+        android:id="@+id/elboeError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -102,21 +157,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints" />
     <EditText
-        android:id="@+id/wristError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="120dp"
-        android:inputType="none"
-        android:text=""
-        android:background="@color/red"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints" />
-    <EditText
-        android:id="@+id/elbowError"
+        android:id="@+id/ankleError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -132,20 +173,6 @@
 
     <EditText
         android:id="@+id/errorEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_margin="350dp"
-        android:inputType="none"
-        android:text=""
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        android:textStyle="bold"
-        android:background="@color/red"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints" />
-    <EditText
-        android:id="@+id/errorposition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -203,65 +230,6 @@
             android:text=""
             android:textStyle="bold"
             android:background="@color/red"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            tools:ignore="MissingConstraints" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        tools:ignore="MissingConstraints">
-
-        <!-- EditText to display goal -->
-        <EditText
-            android:id="@+id/leftShoulder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:text=""
-            android:textStyle="bold"
-            android:background="@color/black"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            tools:ignore="MissingConstraints" />
-
-        <!-- EditText to display correct score -->
-        <EditText
-            android:id="@+id/leftelbow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:text=""
-            android:textStyle="bold"
-            android:background="@color/black"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            tools:ignore="MissingConstraints" />
-
-        <!-- EditText to display incorrect score -->
-        <EditText
-            android:id="@+id/rightShoulder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:text=""
-            android:textStyle="bold"
-            android:background="@color/black"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            tools:ignore="MissingConstraints" />
-        <EditText
-            android:id="@+id/rightelbow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:inputType="none"
-            android:text=""
-            android:textStyle="bold"
-            android:background="@color/black"
             android:textColor="@color/white"
             android:textSize="16sp"
             tools:ignore="MissingConstraints" />

@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public DatabaseHelper(@Nullable Context context) {
-        super(context, "FitnessDB.db", null, 1);
+        super(context, "DB.db", null, 1);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "height DECIMAL ," +
                     "age INTEGER," +
                     "gender TEXT," +
-                    "no_exercise TEXT," +
+                        "no_exercise TEXT," +
                     "exercise_1_3 TEXT," +
                     "exercise_4_5 TEXT," +
                     "intense_exercise_3_4 TEXT," +
@@ -233,11 +233,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String userEmail = cursor.getString(emailIndex);
             String userName = cursor.getString(nameIndex);
             int userGoal = cursor.getInt(goalIndex);
-
-            // Create and return a user_goal object
             return new user_goal(id, userEmail, userName, userGoal);
         } else {
-            // User not found or database error
             return null;
         }
     }
@@ -309,7 +306,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
         }
     }
-    public Boolean checkEmailPassword(String email, String password){
+    public Boolean select_user (String email, String password){
         SQLiteDatabase MyDatabase = this.getWritableDatabase();
         Cursor cursor = MyDatabase.rawQuery("Select * from users where email = ? and password = ?", new String[]{email, password});
         if (cursor.getCount() > 0) {

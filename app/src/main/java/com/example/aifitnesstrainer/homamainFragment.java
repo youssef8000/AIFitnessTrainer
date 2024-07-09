@@ -32,7 +32,7 @@ public class homamainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-         View view= inflater.inflate(R.layout.fragment_homamain, container, false);
+        View view= inflater.inflate(R.layout.fragment_homamain, container, false);
         TextView exercises=view.findViewById(R.id.exercise);
         DatabaseHelper databaseHelper = new DatabaseHelper(getContext());
         SharedPreferences preferences = requireContext().getSharedPreferences("user_info", Context.MODE_PRIVATE);

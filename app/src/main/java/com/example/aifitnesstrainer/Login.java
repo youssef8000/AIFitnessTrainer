@@ -94,7 +94,7 @@ public class Login extends AppCompatActivity {
                 if (email.equals("") || password.equals("")) {
                     Toast.makeText(Login.this, "All fields are mandatory", Toast.LENGTH_SHORT).show();
                 }else {
-                    Boolean checkCredentials = databaseHelper.checkEmailPassword(email,hashedPassword);
+                    Boolean checkCredentials = databaseHelper.select_user(email,hashedPassword);
                     if (checkCredentials) {
                         User loggedInUser = databaseHelper.getUserByEmail(email);
                         saveUserInfo(loggedInUser.getEmail(),loggedInUser.getId());

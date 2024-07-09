@@ -13,7 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.aifitnesstrainer.R;
+import com.example.aifitnesstrainer.arabic.exersices_arabic.Dumbbell_Tricep.dumbbell__tricep_arabic;
 import com.example.aifitnesstrainer.arabic.exersices_arabic.Lateral_raise.lateral_raise_arabic;
+import com.example.aifitnesstrainer.arabic.exersices_arabic.Lunge.lunge_exercise_arabic;
 import com.example.aifitnesstrainer.arabic.exersices_arabic.ShoulderPress.shoulderPress_exercise_arabic;
 import com.example.aifitnesstrainer.arabic.exersices_arabic.squat.squat_exercise_arabic;
 import com.example.aifitnesstrainer.exersices.Dumbbell_Tricep.dumbbell__tricep;
@@ -58,7 +60,7 @@ public class exercises_arabic extends Fragment {
         lunge_exercise.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFragment(new lunge_exercise());
+                openFragment(new lunge_exercise_arabic());
             }
         });
         lateral_raises.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +78,7 @@ public class exercises_arabic extends Fragment {
         dumbbell_tricep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFragment(new dumbbell__tricep());
+                openFragment(new dumbbell__tricep_arabic());
             }
         });
         pushup.setOnClickListener(new View.OnClickListener() {

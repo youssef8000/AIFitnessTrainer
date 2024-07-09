@@ -128,15 +128,5 @@ public class SignUp extends AppCompatActivity {
             return null;
         }
     }
-    private void SendMail(String email, String name,String phone,String password) {
-        String subject = "Your password to log in to the application";
-        String message = "Dear, " + name
-                + "\nYou SignUp successfully and this your data"
-                + "\nYour Name: " + name
-                + "\nYour email: " + email
-                + "\nYour Phone number: " + phone
-                + "\nYour password: " + password;
-        JavaMailAPI javaMailAPI = new JavaMailAPI(this, email, subject, message);
-        javaMailAPI.execute();
-    }
+
 }
